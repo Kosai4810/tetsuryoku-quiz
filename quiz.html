@@ -1,0 +1,2991 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鉄緑会 例文チェック</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            background: #fff;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid #4a9eff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .producer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #4a9eff, #a855f7, #4a9eff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Navigation */
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+
+        .nav-label {
+            width: 100%;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.3rem;
+        }
+
+        .week-btn {
+            padding: 0.6rem 1rem;
+            background: #fff;
+            border: 2px solid #4a9eff;
+            border-radius: 8px;
+            color: #4a9eff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .week-btn:hover, .week-btn.active {
+            background: #4a9eff;
+            color: #fff;
+        }
+
+        .type-btn {
+            padding: 0.5rem 1rem;
+            background: #fff;
+            border: 2px solid #a855f7;
+            border-radius: 8px;
+            color: #a855f7;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .type-btn:hover, .type-btn.active {
+            background: #a855f7;
+            color: #fff;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 0.8rem;
+            background: #fff;
+            border: 2px solid #999;
+            border-radius: 8px;
+            color: #666;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: #666;
+            color: #333;
+        }
+
+        .filter-btn.active {
+            border-color: #4a9eff;
+            color: #4a9eff;
+            background: #e8f4ff;
+        }
+
+        .filter-btn.correct { border-color: #22c55e; color: #22c55e; background: #f0fdf4; }
+        .filter-btn.unsure { border-color: #eab308; color: #b45309; background: #fefce8; }
+        .filter-btn.wrong { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .stat-correct .stat-value { color: #22c55e; }
+        .stat-unsure .stat-value { color: #eab308; }
+        .stat-wrong .stat-value { color: #ef4444; }
+        .stat-total .stat-value { color: #4a9eff; }
+
+        /* Progress */
+        .progress-section {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a9eff, #a855f7);
+            transition: width 0.3s ease;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .question-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .question-week {
+            font-size: 0.85rem;
+            color: #4a9eff;
+            font-weight: bold;
+            background: rgba(74, 158, 255, 0.2);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .question-type {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .question-type.ondoku {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .question-type.anshou {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .question-status {
+            font-size: 1.5rem;
+        }
+
+        .grammar-topic {
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            padding: 1.2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            color: #333;
+        }
+
+        .grammar-note {
+            display: none;
+            background: #e8f4ff;
+            border-left: 3px solid #4a9eff;
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .grammar-note.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .grammar-note strong {
+            color: #4a9eff;
+        }
+
+        .grammar-note .point {
+            color: #a855f7;
+            font-weight: bold;
+        }
+
+        .answer-section {
+            margin-top: 1rem;
+        }
+
+        .show-answer-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4a9eff 0%, #3b82f6 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .show-answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 158, 255, 0.4);
+        }
+
+        .answer-text {
+            display: none;
+            margin-top: 1rem;
+            padding: 1.2rem;
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .answer-text.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .answer-label {
+            font-size: 0.85rem;
+            color: #22c55e;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-english {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .answer-japanese-repeat {
+            font-size: 1rem;
+            color: #666;
+            border-top: 1px solid #d1fae5;
+            padding-top: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .key-expression {
+            display: inline-block;
+            background: #f3e8ff;
+            color: #7c3aed;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin: 0.3rem 0.3rem 0.3rem 0;
+        }
+
+        .key-expressions-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #d1fae5;
+        }
+
+        .key-expressions-label {
+            font-size: 0.8rem;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+
+        .vocab-section {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: #eff6ff;
+            border-radius: 8px;
+        }
+
+        .vocab-label {
+            font-size: 0.8rem;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .vocab-item {
+            display: inline-block;
+            margin: 0.2rem 0.5rem 0.2rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .vocab-item .word {
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        .related-grammar-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #bfdbfe;
+        }
+
+        .related-label {
+            font-size: 0.8rem;
+            color: #16a34a;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .related-items {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Rating Buttons */
+        .rating-buttons {
+            display: none;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .rating-buttons.show {
+            display: flex;
+        }
+
+        .rating-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .rating-btn.correct {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 2px solid #22c55e;
+        }
+
+        .rating-btn.unsure {
+            background: #fefce8;
+            color: #b45309;
+            border: 2px solid #eab308;
+        }
+
+        .rating-btn.wrong {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 2px solid #ef4444;
+        }
+
+        .rating-btn.selected {
+            transform: scale(1.05);
+        }
+
+        .rating-btn.correct.selected { background: #22c55e; color: #fff; }
+        .rating-btn.unsure.selected { background: #eab308; color: #fff; }
+        .rating-btn.wrong.selected { background: #ef4444; color: #fff; }
+
+        /* Next Button */
+        .next-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .next-btn.show {
+            display: block;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Reset Button */
+        .reset-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .reset-btn {
+            padding: 0.8rem 2rem;
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            color: #dc2626;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .no-questions {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .complete-message {
+            text-align: center;
+            padding: 3rem;
+            background: #f0fdf4;
+            border-radius: 16px;
+            border: 1px solid #86efac;
+        }
+
+        .complete-message h2 {
+            color: #16a34a;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .complete-message p {
+            color: #666;
+        }
+
+        .restart-btn {
+            margin-top: 1.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 2rem;
+            background: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .producer {
+                font-size: 1.8rem;
+            }
+
+            header h1 {
+                font-size: 1.2rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .stats {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="producer">prod. by Kosai Shibato</div>
+        <h1>鉄緑会 例文チェック</h1>
+    </header>
+
+    <div class="container">
+        <nav class="nav-section">
+            <div class="nav-label">週を選択</div>
+            <div class="nav-row">
+                <button class="week-btn active" data-week="all">全て</button>
+                <button class="week-btn" data-week="1">第1週</button>
+                <button class="week-btn" data-week="2">第2週</button>
+                <button class="week-btn" data-week="3">第3週</button>
+                <button class="week-btn" data-week="4">第4週</button>
+                <button class="week-btn" data-week="5">第5週</button>
+                <button class="week-btn" data-week="6">第6週</button>
+                <button class="week-btn" data-week="8">第8週</button>
+                <button class="week-btn" data-week="9">第9週</button>
+                <button class="week-btn" data-week="10">第10週</button>
+                <button class="week-btn" data-week="11">第11週</button>
+                <button class="week-btn" data-week="12">第12週</button>
+            </div>
+            <div class="nav-label">例文タイプ</div>
+            <div class="nav-row">
+                <button class="type-btn active" data-type="all">全て</button>
+                <button class="type-btn" data-type="ondoku">音読例文</button>
+                <button class="type-btn" data-type="anshou">暗唱例文</button>
+            </div>
+            <div class="nav-label">フィルター</div>
+            <div class="nav-row">
+                <button class="filter-btn active" data-filter="all">全て</button>
+                <button class="filter-btn correct" data-filter="correct">○のみ</button>
+                <button class="filter-btn unsure" data-filter="unsure">△のみ</button>
+                <button class="filter-btn wrong" data-filter="wrong">×のみ</button>
+                <button class="filter-btn" data-filter="unanswered">未回答</button>
+            </div>
+        </nav>
+
+        <div class="stats">
+            <div class="stat-item stat-total">
+                <div class="stat-value" id="total-count">0</div>
+                <div class="stat-label">問題数</div>
+            </div>
+            <div class="stat-item stat-correct">
+                <div class="stat-value" id="correct-count">0</div>
+                <div class="stat-label">○ 正解</div>
+            </div>
+            <div class="stat-item stat-unsure">
+                <div class="stat-value" id="unsure-count">0</div>
+                <div class="stat-label">△ 不安</div>
+            </div>
+            <div class="stat-item stat-wrong">
+                <div class="stat-value" id="wrong-count">0</div>
+                <div class="stat-label">× 不正解</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <span id="progress-text">0 / 0</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div id="questions-container"></div>
+
+        <div class="reset-section">
+            <button class="reset-btn" onclick="resetAll()">全ての回答をリセット</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>prod. by Kosai Shibato</p>
+    </footer>
+
+    <script>
+        // 問題データ
+        const questions = [
+            // ========== 第1週 ==========
+            // 第1週 音読例文1 (分詞)
+            {
+                week: 1, id: "1-o1-1", type: "ondoku", topic: "分詞（限定用法）",
+                japanese: "試合で負傷した人たちは病院に搬送された。",
+                english: "Those injured in the game were taken to the hospital.",
+                grammar: "過去分詞「injured」が名詞「those」を後ろから修飾しています。<span class='point'>過去分詞は「〜された」という受動の意味</span>を表します。分詞が単独なら前から、句を伴うなら後ろから名詞を修飾します。"
+            },
+            {
+                week: 1, id: "1-o1-2", type: "ondoku", topic: "分詞（叙述用法）",
+                japanese: "彼女は何度も同じことを言い続けた。",
+                english: "She kept saying the same thing over and over.",
+                grammar: "<span class='point'>keep + doing</span> で「〜し続ける」という意味になります。keepの後には現在分詞が続き、動作の継続を表します。同様の動詞：remain, stand, sit, lie など。"
+            },
+            {
+                week: 1, id: "1-o1-3", type: "ondoku", topic: "分詞（叙述用法）",
+                japanese: "彼女は窓辺に座って本を読んでいた。",
+                english: "She sat by the window reading a book.",
+                grammar: "<span class='point'>sit/stand/lie + doing</span> で「〜しながら座る/立つ/横たわる」という意味になります。現在分詞が付帯状況を表しています。"
+            },
+            // 第1週 音読例文2 (様々な文型)
+            {
+                week: 1, id: "1-o2-1", type: "ondoku", topic: "第2文型（SVC）",
+                japanese: "こんなことは奇妙に聞こえるかもしれませんが、本当なんです。",
+                english: "All this may sound strange, but it's true.",
+                grammar: "<span class='point'>sound + 形容詞</span> で「〜に聞こえる」という第2文型です。SVC文型をとる動詞：look（見える）、feel（感じる）、taste（味がする）、smell（においがする）など。"
+            },
+            {
+                week: 1, id: "1-o2-2", type: "ondoku", topic: "第4文型（SVOO）",
+                japanese: "次は僕が一杯ごちそうするよ。",
+                english: "I'll buy you a drink next time.",
+                grammar: "<span class='point'>buy O₁ O₂</span> で「O₁にO₂を買ってあげる」という第4文型です。buy, cook, make, get などは「SVO₂ for O₁」に書き換えられます。"
+            },
+            {
+                week: 1, id: "1-o2-3", type: "ondoku", topic: "第5文型（SVOC）",
+                japanese: "彼とは話しやすいと分かった。",
+                english: "I found it easy to talk to him.",
+                grammar: "<span class='point'>find + O + C</span> で「OがCだと分かる」という第5文型です。itは形式目的語で、真の目的語はto talk to himです。"
+            },
+            {
+                week: 1, id: "1-o2-4", type: "ondoku", topic: "第5文型（help O do）",
+                japanese: "どれを選ぶか決めるのを手伝ってください。",
+                english: "Please help me decide which one to choose.",
+                grammar: "<span class='point'>help + O + (to) do</span> で「Oが〜するのを手伝う」という意味です。helpの後のtoは省略可能です。"
+            },
+            {
+                week: 1, id: "1-o2-5", type: "ondoku", topic: "知覚構文",
+                japanese: "私は自分の名前が呼ばれるのを聞いた。",
+                english: "I heard my name called.",
+                grammar: "<span class='point'>hear + O + 過去分詞</span> で「Oが〜されるのを聞く」という知覚構文です。目的語と補語の間に受動の関係があります。"
+            },
+            {
+                week: 1, id: "1-o2-6", type: "ondoku", topic: "知覚構文（受動態）",
+                japanese: "私は泣いているのを見られたくない。",
+                english: "I don't want to be seen crying.",
+                grammar: "<span class='point'>be seen doing</span> で「〜しているのを見られる」という知覚構文の受動態です。"
+            },
+            {
+                week: 1, id: "1-o2-7", type: "ondoku", topic: "使役構文（受動態）",
+                japanese: "少年は授業後の居残りをさせられた。",
+                english: "The boy was made to stay after class.",
+                grammar: "<span class='point'>be made to do</span> で「〜させられる」という使役の受動態です。能動態では「make O do」ですが、受動態ではtoが必要になります。"
+            },
+            {
+                week: 1, id: "1-o2-8", type: "ondoku", topic: "have O done",
+                japanese: "どこで写真を撮ってもらったのですか。",
+                english: "Where did you have your picture done?",
+                grammar: "<span class='point'>have + O + 過去分詞</span> で「Oを〜してもらう」という意味です。使役の一種ですが、第三者に依頼するニュアンスがあります。"
+            },
+            // 第1週 音読例文3 (名詞・冠詞)
+            {
+                week: 1, id: "1-o3-1", type: "ondoku", topic: "可算名詞・不可算名詞",
+                japanese: "その店は切手やコインを売っています。オーナーはきさくな人です。",
+                english: "The shop sells stamps and coins. The owner is a friendly man.",
+                grammar: "stamps, coinsは<span class='point'>可算名詞の複数形</span>で総称を表します。manは可算名詞なので冠詞aが必要です。"
+            },
+            {
+                week: 1, id: "1-o3-2", type: "ondoku", topic: "可算名詞・不可算名詞",
+                japanese: "年寄りはよくものを忘れる。",
+                english: "Old people often forget things.",
+                grammar: "<span class='point'>people</span>は「人々」の意味では複数扱いです。thingsは「物事」という漠然とした意味で複数形を使います。"
+            },
+            {
+                week: 1, id: "1-o3-3", type: "ondoku", topic: "可算名詞・不可算名詞",
+                japanese: "ピカソは多くの美しい作品を描いた。",
+                english: "Picasso painted many beautiful works.",
+                grammar: "<span class='point'>work</span>は「作品」の意味では可算名詞（works）、「仕事」の意味では不可算名詞です。"
+            },
+            {
+                week: 1, id: "1-o3-4", type: "ondoku", topic: "定冠詞の用法",
+                japanese: "学生の大半はそのテストを難しいと感じた。",
+                english: "Most of the students found the test difficult.",
+                grammar: "<span class='point'>most of the + 名詞</span>で「〜の大半」という意味です。特定の集団を指すのでtheが必要です。"
+            },
+            {
+                week: 1, id: "1-o3-5", type: "ondoku", topic: "冠詞の様々な用法",
+                japanese: "その金は貧しい人たちを助けるのに使うべきだ。",
+                english: "The money should be used to help the poor.",
+                grammar: "<span class='point'>the + 形容詞</span>で「〜な人々」という意味になります。the poor = poor people（貧しい人々）。複数扱いです。"
+            },
+            {
+                week: 1, id: "1-o3-6", type: "ondoku", topic: "冠詞の様々な用法",
+                japanese: "私は週に1, 2回母にメールを書きます。",
+                english: "I write an email to my mother once or twice a week.",
+                grammar: "<span class='point'>once/twice a week</span>で「週に1回/2回」という頻度を表します。a = per（〜につき）の意味です。"
+            },
+            // 第1週 暗唱例文
+            {
+                week: 1, id: "1-a-1", type: "anshou", topic: "分詞（限定用法）",
+                japanese: "興奮した観客は拍手を止めなかった。",
+                english: "The excited audience didn't stop applauding.",
+                grammar: "<span class='point'>excited</span>は過去分詞で「興奮した」という意味。感情を表す分詞は、現在分詞（exciting）が「〜させる」、過去分詞（excited）が「〜した」という意味になります。"
+            },
+            {
+                week: 1, id: "1-a-2", type: "anshou", topic: "分詞（叙述用法）",
+                japanese: "彼は午前中ずっと座ってテレビを見ていた。",
+                english: "He sat watching TV all morning.",
+                grammar: "<span class='point'>sit + doing</span>で「〜しながら座っている」という付帯状況を表します。"
+            },
+            {
+                week: 1, id: "1-a-3", type: "anshou", topic: "第2文型",
+                japanese: "どこが悪いのですか（何が問題だと思われますか）。",
+                english: "What seems to be the problem?",
+                grammar: "<span class='point'>seem to be</span>で「〜のようだ」という第2文型です。疑問詞whatが補語になっています。"
+            },
+            {
+                week: 1, id: "1-a-4", type: "anshou", topic: "第4文型",
+                japanese: "医者は私に減量するよう勧めた。",
+                english: "The doctor advised me to lose weight.",
+                grammar: "<span class='point'>advise O to do</span>で「Oに〜するよう勧める」という意味です。"
+            },
+            {
+                week: 1, id: "1-a-5", type: "anshou", topic: "知覚構文",
+                japanese: "強盗は黒いワゴン車に乗って走り去るのが見られた。",
+                english: "The robber was seen to drive off in a black van.",
+                grammar: "<span class='point'>be seen to do</span>は知覚構文の受動態です。能動態では「see O do」ですが、受動態ではtoが必要になります。"
+            },
+            {
+                week: 1, id: "1-a-6", type: "anshou", topic: "使役構文",
+                japanese: "私たちはポーターに荷物を部屋まで運んでもらった。",
+                english: "We had our baggage taken to the room by the porter.",
+                grammar: "<span class='point'>have + O + 過去分詞</span>で「Oを〜してもらう」という使役表現です。"
+            },
+            {
+                week: 1, id: "1-a-7", type: "anshou", topic: "使役構文",
+                japanese: "私の入院中、病院の職員たちにはとても助けられました。",
+                english: "The hospital staff was very helpful during my stay.",
+                grammar: "<span class='point'>staff</span>は集合名詞で、単数扱いです。形容詞helpfulで「助けになる」という意味を表します。"
+            },
+            {
+                week: 1, id: "1-a-8", type: "anshou", topic: "名詞・冠詞",
+                japanese: "キャンプに必要な全ての装備があるか確認しなさい。",
+                english: "Make sure you have all the equipment you need for camping.",
+                grammar: "<span class='point'>equipment</span>は不可算名詞で、複数形になりません。「装備一式」という集合的な意味を持ちます。"
+            },
+            {
+                week: 1, id: "1-a-9", type: "anshou", topic: "名詞・冠詞",
+                japanese: "日本の人口はメキシコの人口よりも多い。",
+                english: "The population of Japan is larger than that of Mexico.",
+                grammar: "比較対象を明確にするため、<span class='point'>that = the population</span>で言い換えています。"
+            },
+            {
+                week: 1, id: "1-a-10", type: "anshou", topic: "名詞・冠詞",
+                japanese: "道路を走っている車の大半はガソリンを使っている。",
+                english: "Most cars on the road use gasoline.",
+                grammar: "<span class='point'>most + 複数名詞</span>（theなし）で「大半の〜」という総称的な意味になります。"
+            },
+
+            // ========== 第2週 ==========
+            // 第2週 音読例文1 (代名詞I)
+            {
+                week: 2, id: "2-o1-1", type: "ondoku", topic: "代名詞（one）",
+                japanese: "消しゴムを持っていません。買わなくちゃ。",
+                english: "I don't have an eraser. I have to buy one.",
+                grammar: "<span class='point'>one</span>は前出の名詞（eraser）と「同種の別のもの」を指す代名詞です。「a＋名詞」の代わりに使います。特定のものを指す場合はitを使います。"
+            },
+            {
+                week: 2, id: "2-o1-2", type: "ondoku", topic: "代名詞（one）",
+                japanese: "「この辺にコンビニはありますか」「はい、3ブロック先にあります」",
+                english: '"Are there any convenience stores around here?" "Yes, there is one three blocks from here."',
+                grammar: "<span class='point'>one</span>は不特定の1つを指します。複数の場合はonesを使います。"
+            },
+            {
+                week: 2, id: "2-o1-3", type: "ondoku", topic: "代名詞（them）",
+                japanese: "トム、靴を左右逆に履いているわよ。脱ぎなさい。",
+                english: "You have your shoes on the wrong feet, Tom. Take them off.",
+                grammar: "「動詞＋副詞」の句動詞では、<span class='point'>代名詞は動詞と副詞の間</span>に置きます。× take off them → ○ take them off"
+            },
+            {
+                week: 2, id: "2-o1-4", type: "ondoku", topic: "代名詞（it）",
+                japanese: "その本を持って行ってもいいけど、返さなくてはなりませんよ。",
+                english: "You can take the book but you have to bring it back.",
+                grammar: "<span class='point'>it</span>は前出の特定のもの（the book）を指します。bring backも句動詞なので代名詞は間に入ります。"
+            },
+            {
+                week: 2, id: "2-o1-5", type: "ondoku", topic: "代名詞（give it to）",
+                japanese: "財布をポケットから出して私によこせ。",
+                english: "Take the wallet out of your pocket and give it to me.",
+                grammar: "第4文型（SVOO）で<span class='point'>代名詞をO₂にすることはできません</span>。× give me it → ○ give it to me"
+            },
+            {
+                week: 2, id: "2-o1-6", type: "ondoku", topic: "代名詞（that）",
+                japanese: "誰が君にそう言ったの？",
+                english: "Who told you that?",
+                grammar: "<span class='point'>that</span>は前述の内容全体を指すことができます。"
+            },
+            // 第2週 音読例文2 (itの用法)
+            {
+                week: 2, id: "2-o2-1", type: "ondoku", topic: "itの用法（天候）",
+                japanese: "この冬は東京でたくさん雪が降った。",
+                english: "It snowed a lot in Tokyo this winter.",
+                grammar: "<span class='point'>it</span>は天候・時間・距離などを表す文の主語として用いられます。日本語には訳されません。"
+            },
+            {
+                week: 2, id: "2-o2-2", type: "ondoku", topic: "itの用法（状況）",
+                japanese: "この部屋は暑いですね。エアコンをつけていただけますか。",
+                english: "It's hot in here. Would you turn on the air conditioner?",
+                grammar: "<span class='point'>it</span>は漠然とした状況を表すのにも使われます。"
+            },
+            {
+                week: 2, id: "2-o2-3", type: "ondoku", topic: "itの用法（距離）",
+                japanese: "ここから一番近い駅までどのくらいの距離ですか。",
+                english: "How far is it from here to the nearest station?",
+                grammar: "<span class='point'>How far is it ...?</span>で距離を尋ねます。"
+            },
+            {
+                week: 2, id: "2-o2-4", type: "ondoku", topic: "itの用法（曜日）",
+                japanese: "「今日は何曜日ですか」「木曜日です」",
+                english: '"What day is it today?" "It\'s Thursday."',
+                grammar: "曜日・日付・時刻を表す場合も<span class='point'>it</span>を主語にします。"
+            },
+            {
+                week: 2, id: "2-o2-5", type: "ondoku", topic: "itの用法（it takes）",
+                japanese: "彼は自転車を修理するのに2時間かかった。",
+                english: "It took him two hours to repair the bike.",
+                grammar: "<span class='point'>It takes (人) (時間) to do</span>で「（人）が〜するのに（時間）かかる」という意味です。"
+            },
+            {
+                week: 2, id: "2-o2-6", type: "ondoku", topic: "itの用法（how long）",
+                japanese: "治るのにどれくらいかかりますか。",
+                english: "How long will it take to get better?",
+                grammar: "<span class='point'>How long will it take to do?</span>で「〜するのにどれくらいかかりますか」です。"
+            },
+            {
+                week: 2, id: "2-o2-7", type: "ondoku", topic: "itの用法（it costs）",
+                japanese: "私たちが九州を旅行するのに約30万円かかりました。",
+                english: "It cost us about 300,000 yen to travel around Kyushu.",
+                grammar: "<span class='point'>It costs (人) (金額) to do</span>で「〜するのに（金額）かかる」という意味です。costの過去形もcostです。"
+            },
+            // 第2週 音読例文3 (総称人称)
+            {
+                week: 2, id: "2-o3-1", type: "ondoku", topic: "総称人称（you）",
+                japanese: "明日何が起こるかは決して分からない。",
+                english: "You never know what will happen tomorrow.",
+                grammar: "<span class='point'>you</span>は特定の人ではなく、不特定の人々を漠然と指す「総称人称」として使われます。"
+            },
+            {
+                week: 2, id: "2-o3-2", type: "ondoku", topic: "総称人称（we）",
+                japanese: "日本では食事の前に『いただきます』と言います。",
+                english: 'In Japan, we say "itadakimasu" before eating a meal.',
+                grammar: "<span class='point'>we</span>は「私たち日本人」という限定された集団を指しています。"
+            },
+            {
+                week: 2, id: "2-o3-3", type: "ondoku", topic: "総称人称（they）",
+                japanese: "トムとケイトは結婚するといううわさだ。",
+                english: "They say that Tom and Kate are going to get married.",
+                grammar: "<span class='point'>They say (that) ...</span>で「〜といううわさだ」「〜と言われている」という意味です。"
+            },
+            {
+                week: 2, id: "2-o3-4", type: "ondoku", topic: "総称人称（one）",
+                japanese: "人は自分の考えをはっきりと言わなくてはならない。",
+                english: "One has to express one's thoughts clearly.",
+                grammar: "<span class='point'>one</span>は単数扱いで、youより固い言い回しです。所有格はone'sです。"
+            },
+            // 第2週 音読例文4 (再帰代名詞)
+            {
+                week: 2, id: "2-o4-1", type: "ondoku", topic: "再帰代名詞（再帰用法）",
+                japanese: "新しい先生はクラスの人たちに自己紹介した。",
+                english: "The new teacher introduced herself to the class.",
+                grammar: "主語と目的語が同一人物の場合、<span class='point'>再帰代名詞</span>（herself）を使います。× introduced her"
+            },
+            {
+                week: 2, id: "2-o4-2", type: "ondoku", topic: "再帰代名詞（help oneself）",
+                japanese: "テーブルの上の食べ物は自由にとって食べて下さい。",
+                english: "Help yourself to the food on the table.",
+                grammar: "<span class='point'>help oneself to ...</span>で「...を自分でとって食べる」という慣用表現です。"
+            },
+            {
+                week: 2, id: "2-o4-3", type: "ondoku", topic: "再帰代名詞（make oneself understood）",
+                japanese: "私は英語では通じなかった。",
+                english: "I couldn't make myself understood in English.",
+                grammar: "<span class='point'>make oneself understood</span>で「自分の言うことを理解してもらう」という意味です。"
+            },
+            {
+                week: 2, id: "2-o4-4", type: "ondoku", topic: "再帰代名詞（by oneself）",
+                japanese: "彼は18歳から一人暮らしを始めた。",
+                english: "He started to live by himself at the age of 18.",
+                grammar: "<span class='point'>by oneself</span>で「一人で」という意味になります。"
+            },
+            {
+                week: 2, id: "2-o4-5", type: "ondoku", topic: "再帰代名詞（強調用法）",
+                japanese: "私自身は京都に行ったことがありません。",
+                english: "I myself have never been to Kyoto.",
+                grammar: "<span class='point'>強調用法</span>の再帰代名詞は、強調する語の直後に置きます。「私自身は」という強調です。"
+            },
+            {
+                week: 2, id: "2-o4-6", type: "ondoku", topic: "再帰代名詞（強調用法）",
+                japanese: "そのレストランそのものは悪くなかった。",
+                english: "The restaurant itself was not bad.",
+                grammar: "<span class='point'>itself</span>で「そのもの」という強調を表します。"
+            },
+            // 第2週 暗唱例文
+            {
+                week: 2, id: "2-a-1", type: "anshou", topic: "代名詞（one）",
+                japanese: "消しゴムを持っていません。買わなくちゃ。",
+                english: "I don't have an eraser. I have to buy one.",
+                grammar: "<span class='point'>one</span>は「a＋名詞」の代わりに使う不定代名詞です。"
+            },
+            {
+                week: 2, id: "2-a-2", type: "anshou", topic: "代名詞（them）",
+                japanese: "トム、靴を左右逆に履いているわよ。脱ぎなさい。",
+                english: "You have your shoes on the wrong feet, Tom. Take them off.",
+                grammar: "句動詞で代名詞は<span class='point'>動詞と副詞の間</span>に置きます。"
+            },
+            {
+                week: 2, id: "2-a-3", type: "anshou", topic: "itの用法（距離）",
+                japanese: "ここから一番近い駅までどのくらいの距離ですか。",
+                english: "How far is it from here to the nearest station?",
+                grammar: "距離を尋ねる表現です。itは形式主語です。"
+            },
+            {
+                week: 2, id: "2-a-4", type: "anshou", topic: "itの用法（it takes）",
+                japanese: "彼は自転車を修理するのに2時間かかった。",
+                english: "It took him two hours to repair the bike.",
+                grammar: "<span class='point'>It takes (人) (時間) to do</span>の構文です。"
+            },
+            {
+                week: 2, id: "2-a-5", type: "anshou", topic: "itの用法（it costs）",
+                japanese: "私たちが九州を旅行するのに約30万円かかりました。",
+                english: "It cost us about 300,000 yen to travel around Kyushu.",
+                grammar: "<span class='point'>It costs (人) (金額) to do</span>の構文です。"
+            },
+            {
+                week: 2, id: "2-a-6", type: "anshou", topic: "総称人称（you）",
+                japanese: "明日何が起こるかは決して分からない。",
+                english: "You never know what will happen tomorrow.",
+                grammar: "総称人称のyouで「人は誰でも」という意味です。"
+            },
+            {
+                week: 2, id: "2-a-7", type: "anshou", topic: "総称人称（one）",
+                japanese: "人は自分の考えをはっきりと言わなくてはならない。",
+                english: "One has to express one's thoughts clearly.",
+                grammar: "oneは総称人称としてyouより固い表現です。"
+            },
+            {
+                week: 2, id: "2-a-8", type: "anshou", topic: "再帰代名詞（help oneself）",
+                japanese: "テーブルの上の食べ物は自由にとって食べて下さい。",
+                english: "Help yourself to the food on the table.",
+                grammar: "<span class='point'>help oneself to</span>の慣用表現です。"
+            },
+            {
+                week: 2, id: "2-a-9", type: "anshou", topic: "再帰代名詞（make oneself understood）",
+                japanese: "私は英語では通じなかった。",
+                english: "I couldn't make myself understood in English.",
+                grammar: "<span class='point'>make oneself understood</span>で「言葉が通じる」です。"
+            },
+            {
+                week: 2, id: "2-a-10", type: "anshou", topic: "再帰代名詞（強調用法）",
+                japanese: "そのレストランそのものは悪くなかった。",
+                english: "The restaurant itself was not bad.",
+                grammar: "itselfは強調用法で「そのもの」という意味です。"
+            },
+
+            // ========== 第3週 ==========
+            // 第3週 音読例文1 (both/either/neither)
+            {
+                week: 3, id: "3-o1-1", type: "ondoku", topic: "both",
+                japanese: "私の両親はどちらも大阪出身です。",
+                english: "Both of my parents are from Osaka.",
+                grammar: "<span class='point'>both</span>は「両方とも」という意味で、複数扱いです。both of＋限定詞＋名詞、またはboth＋名詞の形で使います。"
+            },
+            {
+                week: 3, id: "3-o1-2", type: "ondoku", topic: "both",
+                japanese: "トムも私も学校に遅刻した。",
+                english: "Both Tom and I were late for school.",
+                grammar: "<span class='point'>both A and B</span>で「AもBも両方」という相関用法です。複数扱いになります。"
+            },
+            {
+                week: 3, id: "3-o1-3", type: "ondoku", topic: "either",
+                japanese: "電車かバスのどちらかでそこに行けます。",
+                english: "You can go there either by train or by bus.",
+                grammar: "<span class='point'>either A or B</span>で「AかBのどちらか」という意味です。"
+            },
+            {
+                week: 3, id: "3-o1-4", type: "ondoku", topic: "either",
+                japanese: "どちらの日でも私は大丈夫です。",
+                english: "Either day is fine with me.",
+                grammar: "<span class='point'>either</span>は「どちらか一方」という意味で、単数扱いです。"
+            },
+            {
+                week: 3, id: "3-o1-5", type: "ondoku", topic: "neither",
+                japanese: "私には2人の兄がいます。どちらも結婚していません。",
+                english: "I have two big brothers. Neither of them is married.",
+                grammar: "<span class='point'>neither</span>は「どちらも〜ない」という意味で、単数扱いです。"
+            },
+            {
+                week: 3, id: "3-o1-6", type: "ondoku", topic: "neither...nor",
+                japanese: "彼は煙草も吸わないし、酒も飲みません。",
+                english: "He neither smokes nor drinks.",
+                grammar: "<span class='point'>neither A nor B</span>で「AもBも〜ない」という意味です。"
+            },
+            {
+                week: 3, id: "3-o1-7", type: "ondoku", topic: "either（否定文）",
+                japanese: "父は煙草を吸いません。酒も飲みません。",
+                english: "My father doesn't smoke. He doesn't drink, either.",
+                grammar: "否定文を受けて「〜もまた...ない」という場合は<span class='point'>either</span>を使います。肯定文ではtooを使います。"
+            },
+            // 第3週 音読例文2 (all/every/each/none)
+            {
+                week: 3, id: "3-o2-1", type: "ondoku", topic: "every",
+                japanese: "クラスの皆がその知らせを聞いてショックを受けた。",
+                english: "Every student in the class was shocked when they heard the news.",
+                grammar: "<span class='point'>every</span>は「どの〜も」という意味で、単数扱いです。ただし、代名詞で受けるときはtheyを使うことがあります。"
+            },
+            {
+                week: 3, id: "3-o2-2", type: "ondoku", topic: "each",
+                japanese: "それぞれのチームには独自のマスコットがいる。",
+                english: "Each team has its own mascot.",
+                grammar: "<span class='point'>each</span>は「それぞれの」という意味で、個々に焦点を当てます。単数扱いです。"
+            },
+            {
+                week: 3, id: "3-o2-3", type: "ondoku", topic: "each of",
+                japanese: "私たち一人一人が違った考えを持っている。",
+                english: "Each of us has a different opinion.",
+                grammar: "<span class='point'>each of＋複数名詞/代名詞</span>の形で、動詞は単数扱いになります。"
+            },
+            {
+                week: 3, id: "3-o2-4", type: "ondoku", topic: "none",
+                japanese: "これらのコンピュータはどれも動かない。",
+                english: "None of these computers work.",
+                grammar: "<span class='point'>none of＋複数名詞</span>で「〜のどれも...ない」。動詞は単数・複数どちらも可能です。"
+            },
+            // 第3週 音読例文3 (some/any/-thing/-one/-body/-where)
+            {
+                week: 3, id: "3-o3-1", type: "ondoku", topic: "some（理由）",
+                japanese: "彼女の行動には何らかの理由があるに違いない。",
+                english: "There must be some reason for her behavior.",
+                grammar: "<span class='point'>some＋単数可算名詞</span>で「何らかの」「ある」という意味になります。"
+            },
+            {
+                week: 3, id: "3-o3-2", type: "ondoku", topic: "any",
+                japanese: "どんな先生に聞いても同じ事を言うでしょう。",
+                english: "Ask any teacher and they'll tell you the same thing.",
+                grammar: "肯定文での<span class='point'>any</span>は「どんな〜でも」という意味になります。"
+            },
+            {
+                week: 3, id: "3-o3-3", type: "ondoku", topic: "something",
+                japanese: "あなたにお伝えする重要なことがあります。",
+                english: "I have something important to tell you.",
+                grammar: "<span class='point'>something＋形容詞</span>の語順になります。形容詞は後ろに置きます。"
+            },
+            {
+                week: 3, id: "3-o3-4", type: "ondoku", topic: "somewhere/anywhere",
+                japanese: "部屋のどこかに鍵を置いたのを覚えているのだが、どこにも見つからない。",
+                english: "I remember putting my keys somewhere in the room, but I can't find them anywhere.",
+                grammar: "<span class='point'>somewhere</span>は肯定文、<span class='point'>anywhere</span>は否定文・疑問文で使います。"
+            },
+            {
+                week: 3, id: "3-o3-5", type: "ondoku", topic: "anything else",
+                japanese: "他にご用はありますか。",
+                english: "Is there anything else I can do for you?",
+                grammar: "<span class='point'>anything else</span>で「他に何か」という意味です。elseは「他の」という意味の形容詞です。"
+            },
+            // 第3週 音読例文4 (another/other)
+            {
+                week: 3, id: "3-o4-1", type: "ondoku", topic: "another",
+                japanese: "このスカートは気に入りません。別のを見せてくれますか。",
+                english: "I don't like this skirt. Can you show me another?",
+                grammar: "<span class='point'>another</span>は「（不特定の）別の1つ」という意味です。an + otherから成り立っています。"
+            },
+            {
+                week: 3, id: "3-o4-2", type: "ondoku", topic: "the others",
+                japanese: "彼らには3人子供がいます。一人は男の子で、あとの二人は女の子です。",
+                english: "They have three children. One is a boy, and the others are girls.",
+                grammar: "<span class='point'>the others</span>は「残りの全て」という意味で、特定の複数を指します。"
+            },
+            {
+                week: 3, id: "3-o4-3", type: "ondoku", topic: "the other",
+                japanese: "彼らには二人息子がいます。一人は13歳で、もう一人はまだ赤ちゃんです。",
+                english: "They have two sons. One is thirteen years old, and the other is still a baby.",
+                grammar: "2つのうち<span class='point'>the other</span>は「残りの1つ」を指します。"
+            },
+            {
+                week: 3, id: "3-o4-4", type: "ondoku", topic: "the other side",
+                japanese: "彼は通りの反対側まで走った。",
+                english: "He ran to the other side of the street.",
+                grammar: "<span class='point'>the other</span>は形容詞として「もう一方の」という意味でも使います。"
+            },
+            {
+                week: 3, id: "3-o4-5", type: "ondoku", topic: "the other students",
+                japanese: "ジェシカは試験に合格したが、他の生徒は全員合格しなかった。",
+                english: "Jessica passed the test, but the other students didn't.",
+                grammar: "<span class='point'>the other + 複数名詞</span>で「残りの〜全員」という意味です。"
+            },
+            {
+                week: 3, id: "3-o4-6", type: "ondoku", topic: "some...others",
+                japanese: "結果に満足している人もいれば、していない人もいた。",
+                english: "Some were happy with the results, and others were not.",
+                grammar: "<span class='point'>some...others</span>で「〜もいれば、...もいる」という対比を表します。"
+            },
+            {
+                week: 3, id: "3-o4-7", type: "ondoku", topic: "each other",
+                japanese: "彼らはインターネットを通じてお互いに話し合った。",
+                english: "They talked to each other over the Internet.",
+                grammar: "<span class='point'>each other</span>は「お互いに」という意味の代名詞です。前置詞の目的語になれます。"
+            },
+            // 第3週 暗唱例文
+            {
+                week: 3, id: "3-a-1", type: "anshou", topic: "both",
+                japanese: "私の両親はどちらも大阪出身です。",
+                english: "Both of my parents are from Osaka.",
+                grammar: "bothは複数扱いで「両方とも」という意味です。"
+            },
+            {
+                week: 3, id: "3-a-2", type: "anshou", topic: "neither",
+                japanese: "私には2人の兄がいます。どちらも結婚していません。",
+                english: "I have two big brothers. Neither of them is married.",
+                grammar: "neitherは単数扱いで「どちらも〜ない」という意味です。"
+            },
+            {
+                week: 3, id: "3-a-3", type: "anshou", topic: "neither...nor",
+                japanese: "父は煙草も吸わないし、酒も飲みません。",
+                english: "My father neither smokes nor drinks.",
+                grammar: "neither A nor Bで「AもBも〜ない」です。"
+            },
+            {
+                week: 3, id: "3-a-4", type: "anshou", topic: "each of",
+                japanese: "私たち一人一人が違った考えを持っている。",
+                english: "Each of us has a different opinion.",
+                grammar: "each ofの後は複数名詞ですが、動詞は単数扱いです。"
+            },
+            {
+                week: 3, id: "3-a-5", type: "anshou", topic: "none of",
+                japanese: "これらのコンピュータはどれも動かない。",
+                english: "None of these computers work.",
+                grammar: "none ofは「どれも〜ない」という全否定です。"
+            },
+            {
+                week: 3, id: "3-a-6", type: "anshou", topic: "somewhere/anywhere",
+                japanese: "部屋のどこかに鍵を置いたのを覚えているのだが、どこにも見つからない。",
+                english: "I remember putting my keys somewhere in the room, but I can't find them anywhere.",
+                grammar: "somewhereは肯定文、anywhereは否定文で使います。"
+            },
+            {
+                week: 3, id: "3-a-7", type: "anshou", topic: "anything else",
+                japanese: "他にご用はありますか。",
+                english: "Is there anything else I can do for you?",
+                grammar: "anything elseで「他に何か」という意味です。"
+            },
+            {
+                week: 3, id: "3-a-8", type: "anshou", topic: "the others",
+                japanese: "彼らには3人子供がいます。一人は男の子で、あとの二人は女の子です。",
+                english: "They have three children. One is a boy, and the others are girls.",
+                grammar: "the othersは「残りの全て」を指します。"
+            },
+            {
+                week: 3, id: "3-a-9", type: "anshou", topic: "the other side",
+                japanese: "彼は通りの反対側まで走った。",
+                english: "He ran to the other side of the street.",
+                grammar: "the otherは「もう一方の」という形容詞用法です。"
+            },
+            {
+                week: 3, id: "3-a-10", type: "anshou", topic: "each other",
+                japanese: "彼らはインターネットを通じてお互いに話し合った。",
+                english: "They talked to each other over the Internet.",
+                grammar: "each otherは「お互いに」という代名詞です。"
+            },
+
+            // ========== 第4週 ==========
+            // 第4週 音読例文1 (比較級)
+            {
+                week: 4, id: "4-o1-1", type: "ondoku", topic: "比較級",
+                japanese: "僕は怖がっているけど、君のほうが怖がっているはずだ。",
+                english: "I'm scared, but you must be more scared.",
+                grammar: "<span class='point'>比較級</span>は「より〜である」という意味です。2音節以上の形容詞はmoreを前に置きます。"
+            },
+            {
+                week: 4, id: "4-o1-2", type: "ondoku", topic: "比較級",
+                japanese: "私はもっと大きな家がほしい。",
+                english: "I want a larger house.",
+                grammar: "比較対象が明示されていなくても<span class='point'>比較級</span>を使えます。「今より」という意味が含まれます。"
+            },
+            {
+                week: 4, id: "4-o1-3", type: "ondoku", topic: "比較級（than）",
+                japanese: "ここはうるさいね。どこかもっと静かな場所に行こう。",
+                english: "It's noisy here, isn't it? Let's go somewhere quieter.",
+                grammar: "<span class='point'>somewhere＋比較級</span>で「もっと〜なところ」という意味になります。"
+            },
+            {
+                week: 4, id: "4-o1-4", type: "ondoku", topic: "比較級（than）",
+                japanese: "ジョンはたいていの友人よりも背が高い。",
+                english: "John is taller than most of his friends.",
+                grammar: "<span class='point'>than</span>の後には比較対象が来ます。"
+            },
+            {
+                week: 4, id: "4-o1-5", type: "ondoku", topic: "比較級（than）",
+                japanese: "私はあなたよりもよくその公園に行きます。",
+                english: "I visit the park more often than you do.",
+                grammar: "副詞の比較級も<span class='point'>more＋原級</span>の形になります（2音節以上の場合）。"
+            },
+            {
+                week: 4, id: "4-o1-6", type: "ondoku", topic: "比較級（than）",
+                japanese: "ジョーンズさんは木曜日よりも金曜日の方が忙しい。",
+                english: "Ms. Jones is busier on Fridays than on Thursdays.",
+                grammar: "thanの前後では<span class='point'>文法的に対等なもの</span>を比較します。"
+            },
+            // 第4週 音読例文2 (原級比較)
+            {
+                week: 4, id: "4-o2-1", type: "ondoku", topic: "原級比較（as...as）",
+                japanese: "彼はプロと同じくらいギターを弾くのが上手い。",
+                english: "He plays the guitar as well as a professional.",
+                grammar: "<span class='point'>as＋副詞の原級＋as</span>で「...と同じくらい〜」という原級比較です。"
+            },
+            {
+                week: 4, id: "4-o2-2", type: "ondoku", topic: "原級比較（否定）",
+                japanese: "彼女は見た目ほど年をとっていない。",
+                english: "She isn't as old as she looks.",
+                grammar: "否定文での原級比較は<span class='point'>「...ほど〜でない」</span>という意味になります。"
+            },
+            {
+                week: 4, id: "4-o2-3", type: "ondoku", topic: "原級比較（否定）",
+                japanese: "ケンはサラほど熱心に試験勉強をしなかった。",
+                english: "Ken didn't study for the test as hard as Sarah did.",
+                grammar: "副詞の原級比較の否定文です。"
+            },
+            {
+                week: 4, id: "4-o2-4", type: "ondoku", topic: "原級比較（語順）",
+                japanese: "君は自分で思っているほど歌が上手いわけではない。",
+                english: "You are not as good a singer as you think.",
+                grammar: "<span class='point'>as＋形容詞＋a(n)＋名詞</span>の語順に注意。× as a good singer"
+            },
+            {
+                week: 4, id: "4-o2-5", type: "ondoku", topic: "原級比較（as...as possible）",
+                japanese: "私は全速力で走った。",
+                english: "I ran as fast as I could.",
+                grammar: "<span class='point'>as ... as S can</span>で「できるだけ...」という意味です。= as ... as possible"
+            },
+            {
+                week: 4, id: "4-o2-6", type: "ondoku", topic: "原級比較（as soon as possible）",
+                japanese: "できるだけ早く我々に情報を送ってください。",
+                english: "Please send us the information as soon as possible.",
+                grammar: "<span class='point'>as soon as possible</span>は「できるだけ早く」という頻出表現です。"
+            },
+            // 第4週 音読例文3 (比較の注意点)
+            {
+                week: 4, id: "4-o3-1", type: "ondoku", topic: "比較の注意点（that of）",
+                japanese: "日本の人口はメキシコよりも多い。",
+                english: "The population of Japan is larger than that of Mexico.",
+                grammar: "<span class='point'>that of Mexico</span>は「the population of Mexico」の代わりです。比較対象を明確にします。"
+            },
+            {
+                week: 4, id: "4-o3-2", type: "ondoku", topic: "比較の注意点（as...as）",
+                japanese: "私は以前ほど強くない。",
+                english: "I'm not as strong as I used to be.",
+                grammar: "<span class='point'>used to be</span>は「以前は〜だった」という意味で、現在との比較に使われます。"
+            },
+            {
+                week: 4, id: "4-o3-3", type: "ondoku", topic: "比較の注意点（in/than）",
+                japanese: "彼は母国よりもアメリカでの方が有名だ。",
+                english: "He is more famous in the States than in his own country.",
+                grammar: "「in the States」と「in his own country」という<span class='point'>場所を比較</span>しています。"
+            },
+            {
+                week: 4, id: "4-o3-4", type: "ondoku", topic: "比較の注意点（than expected）",
+                japanese: "試験の結果は私が思っていたよりも悪かった。",
+                english: "The test results were worse than I had expected.",
+                grammar: "<span class='point'>than S think/expect</span>で「思ったよりも」という定型表現です。"
+            },
+            {
+                week: 4, id: "4-o3-5", type: "ondoku", topic: "比較の注意点（than usual）",
+                japanese: "この夏はビーチはいつもより混んでいる。",
+                english: "The beach is more crowded than usual this summer.",
+                grammar: "<span class='point'>than usual</span>で「いつもより」という意味です。"
+            },
+            {
+                week: 4, id: "4-o3-6", type: "ondoku", topic: "比較の注意点（look older）",
+                japanese: "そのネクタイをすると老けて（実際よりも年上に）見えるよ。",
+                english: "The tie makes you look older.",
+                grammar: "比較級の<span class='point'>older</span>は「年寄りの」ではなく「より年上」という意味になります。"
+            },
+            // 第4週 暗唱例文
+            {
+                week: 4, id: "4-a-1", type: "anshou", topic: "比較級",
+                japanese: "ここはうるさいね。どこかもっと静かな場所に行こう。",
+                english: "It's noisy here, isn't it? Let's go somewhere quieter.",
+                grammar: "somewhere＋比較級で「もっと〜なところ」です。"
+            },
+            {
+                week: 4, id: "4-a-2", type: "anshou", topic: "比較級（than）",
+                japanese: "私はあなたよりもよくその公園に行きます。",
+                english: "I visit the park more often than you do.",
+                grammar: "副詞oftenの比較級はmore oftenです。"
+            },
+            {
+                week: 4, id: "4-a-3", type: "anshou", topic: "原級比較",
+                japanese: "彼はプロと同じくらいギターを弾くのが上手い。",
+                english: "He plays the guitar as well as a professional.",
+                grammar: "as＋原級＋asで「同じくらい〜」です。"
+            },
+            {
+                week: 4, id: "4-a-4", type: "anshou", topic: "原級比較（否定）",
+                japanese: "彼女は見た目ほど年をとっていない。",
+                english: "She isn't as old as she looks.",
+                grammar: "not as...asで「ほど〜でない」です。"
+            },
+            {
+                week: 4, id: "4-a-5", type: "anshou", topic: "原級比較（語順）",
+                japanese: "君は自分で思っているほど歌が上手いわけではない。",
+                english: "You are not as good a singer as you think.",
+                grammar: "as＋形容詞＋a＋名詞の語順に注意。"
+            },
+            {
+                week: 4, id: "4-a-6", type: "anshou", topic: "原級比較（as...as possible）",
+                japanese: "私は全速力で走った。",
+                english: "I ran as fast as I could.",
+                grammar: "as...as S canで「できるだけ」です。"
+            },
+            {
+                week: 4, id: "4-a-7", type: "anshou", topic: "比較の注意点（as...as）",
+                japanese: "私は以前ほど強くない。",
+                english: "I'm not as strong as I used to be.",
+                grammar: "used to beは「以前は〜だった」です。"
+            },
+            {
+                week: 4, id: "4-a-8", type: "anshou", topic: "比較の注意点（in/than）",
+                japanese: "彼は母国よりもアメリカでの方が有名だ。",
+                english: "He is more famous in the States than in his own country.",
+                grammar: "場所同士を比較しています。"
+            },
+            {
+                week: 4, id: "4-a-9", type: "anshou", topic: "比較の注意点（than expected）",
+                japanese: "試験の結果は私が思っていたよりも悪かった。",
+                english: "The test results were worse than I had expected.",
+                grammar: "than expectedで「予想よりも」です。"
+            },
+            {
+                week: 4, id: "4-a-10", type: "anshou", topic: "比較の注意点（than usual）",
+                japanese: "この夏はビーチはいつもより混んでいる。",
+                english: "The beach is more crowded than usual this summer.",
+                grammar: "than usualで「いつもより」です。"
+            },
+
+            // ========== 第5週 ==========
+            // 第5週 音読例文1 (比較の差を表す表現)
+            {
+                week: 5, id: "5-o1-1", type: "ondoku", topic: "比較の差（much）",
+                japanese: "トムは数学がとても得意ですが、グレッグの方がずっと得意です。",
+                english: "Tom is very good at math, but Greg is much better.",
+                grammar: "<span class='point'>much＋比較級</span>で「ずっと〜」という差を表します。原級ではveryを使いますが、比較級ではmuchを使います。"
+            },
+            {
+                week: 5, id: "5-o1-2", type: "ondoku", topic: "比較の差（far）",
+                japanese: "この車はあの車よりもはるかに高いです。",
+                english: "This car is far more expensive than that one.",
+                grammar: "<span class='point'>far＋比較級</span>で「はるかに〜」という大きな差を表します。"
+            },
+            {
+                week: 5, id: "5-o1-3", type: "ondoku", topic: "比較の差（a lot）",
+                japanese: "私は今よりもずっと沢山お金を稼ぐ必要がある。",
+                english: "I need to earn a lot more money than I do now.",
+                grammar: "<span class='point'>a lot＋比較級</span>で「ずっと〜」という差を表します。"
+            },
+            {
+                week: 5, id: "5-o1-4", type: "ondoku", topic: "比較の差（a little）",
+                japanese: "もう少しゆっくりと話してくれますか。",
+                english: "Can you speak a little more slowly?",
+                grammar: "<span class='point'>a little＋比較級</span>で「少し〜」という小さな差を表します。"
+            },
+            // 第5週 音読例文2 (倍数比較)
+            {
+                week: 5, id: "5-o2-1", type: "ondoku", topic: "倍数比較（twice as...as）",
+                japanese: "兄は私の2倍のお金を稼いでいる。",
+                english: "My brother earns twice as much money as I do.",
+                grammar: "<span class='point'>倍数詞＋as...as</span>で「〜の...倍」という意味です。twice = 2倍。"
+            },
+            {
+                week: 5, id: "5-o2-2", type: "ondoku", topic: "倍数比較（three times as...as）",
+                japanese: "この橋はあの橋の3倍以上の長さだ。",
+                english: "This bridge is more than three times as long as that one.",
+                grammar: "<span class='point'>three times as long as</span>で「3倍の長さ」です。more thanで「以上」を表します。"
+            },
+            {
+                week: 5, id: "5-o2-3", type: "ondoku", topic: "倍数比較（half）",
+                japanese: "君は自分で考えている半分も賢くないよ。",
+                english: "You are not half as smart as you think you are.",
+                grammar: "<span class='point'>half as...as</span>で「半分の〜」という意味です。否定文では「半分も〜ない」となります。"
+            },
+            {
+                week: 5, id: "5-o2-4", type: "ondoku", topic: "倍数比較（one third）",
+                japanese: "この町には50年前にくらべて3分の1の人しか住んでいない。",
+                english: "There are only one third as many people living in this town as there were 50 years ago.",
+                grammar: "<span class='point'>one third as many as</span>で「3分の1の数」という意味です。"
+            },
+            {
+                week: 5, id: "5-o2-5", type: "ondoku", topic: "倍数比較（times the size）",
+                japanese: "オーストラリアは日本の20倍の大きさだ。",
+                english: "Australia is twenty times the size of Japan.",
+                grammar: "<span class='point'>倍数詞＋the size of</span>で「〜の...倍の大きさ」という意味です。"
+            },
+            {
+                week: 5, id: "5-o2-6", type: "ondoku", topic: "倍数比較（twice her age）",
+                japanese: "彼女は自分の2倍の年齢の男と結婚した。",
+                english: "She married a man twice her age.",
+                grammar: "<span class='point'>twice her age</span>で「彼女の2倍の年齢」という意味です。as old asを省略した形です。"
+            },
+            // 第5週 音読例文3 (劣等比較・比較級 and 比較級)
+            {
+                week: 5, id: "5-o3-1", type: "ondoku", topic: "劣等比較（less...than）",
+                japanese: "ビーチはいつもほど混雑していない。",
+                english: "The beach is less crowded than usual.",
+                grammar: "<span class='point'>less＋原級＋than</span>で「〜ほど...でない」という劣等比較です。= not as crowded as usual"
+            },
+            {
+                week: 5, id: "5-o3-2", type: "ondoku", topic: "劣等比較（less）",
+                japanese: "あなたはもっとよく運動して、食べる量を減らした方がいい。",
+                english: "You should exercise more and eat less.",
+                grammar: "<span class='point'>less</span>は「より少なく」という意味の副詞です。"
+            },
+            {
+                week: 5, id: "5-o3-3", type: "ondoku", topic: "比較級 and 比較級",
+                japanese: "王女は大きくなるにつれてますます美しくなった。",
+                english: "The princess became more and more beautiful as she grew up.",
+                grammar: "<span class='point'>more and more＋形容詞</span>で「ますます〜」という意味です。程度が次第に高まることを表します。"
+            },
+            {
+                week: 5, id: "5-o3-4", type: "ondoku", topic: "比較級 and 比較級",
+                japanese: "ネットで本を買う人の数が増えてきている。",
+                english: "More and more people are buying books online.",
+                grammar: "<span class='point'>More and more＋名詞</span>で「ますます多くの〜」という意味です。"
+            },
+            // 第5週 暗唱例文
+            {
+                week: 5, id: "5-a-1", type: "anshou", topic: "比較の差（much）",
+                japanese: "トムは数学がとても得意ですが、グレッグの方がずっと得意です。",
+                english: "Tom is very good at math, but Greg is much better.",
+                grammar: "比較級を強調するにはmuch/far/a lotを使います。"
+            },
+            {
+                week: 5, id: "5-a-2", type: "anshou", topic: "比較の差（far）",
+                japanese: "この車はあの車よりもはるかに高いです。",
+                english: "This car is far more expensive than that one.",
+                grammar: "farは「はるかに」という大きな差を表します。"
+            },
+            {
+                week: 5, id: "5-a-3", type: "anshou", topic: "比較の差（a little）",
+                japanese: "もう少しゆっくりと話してくれますか。",
+                english: "Can you speak a little more slowly?",
+                grammar: "a littleは「少し」という小さな差を表します。"
+            },
+            {
+                week: 5, id: "5-a-4", type: "anshou", topic: "倍数比較（twice as...as）",
+                japanese: "兄は私の2倍のお金を稼いでいる。",
+                english: "My brother earns twice as much money as I do.",
+                grammar: "twice as...asで「2倍の〜」です。"
+            },
+            {
+                week: 5, id: "5-a-5", type: "anshou", topic: "倍数比較（half）",
+                japanese: "君は自分で考えている半分も賢くないよ。",
+                english: "You are not half as smart as you think you are.",
+                grammar: "not half as...asで「半分も〜ない」です。"
+            },
+            {
+                week: 5, id: "5-a-6", type: "anshou", topic: "倍数比較（times the size）",
+                japanese: "オーストラリアは日本の20倍の大きさだ。",
+                english: "Australia is twenty times the size of Japan.",
+                grammar: "times the size ofで「〜の...倍の大きさ」です。"
+            },
+            {
+                week: 5, id: "5-a-7", type: "anshou", topic: "倍数比較（twice her age）",
+                japanese: "彼女は自分の2倍の年齢の男と結婚した。",
+                english: "She married a man twice her age.",
+                grammar: "twice her ageは省略形で「彼女の2倍の年齢」です。"
+            },
+            {
+                week: 5, id: "5-a-8", type: "anshou", topic: "劣等比較（less...than）",
+                japanese: "ビーチはいつもほど混雑していない。",
+                english: "The beach is less crowded than usual.",
+                grammar: "less...thanで「〜ほど...でない」です。"
+            },
+            {
+                week: 5, id: "5-a-9", type: "anshou", topic: "比較級 and 比較級",
+                japanese: "王女は大きくなるにつれてますます美しくなった。",
+                english: "The princess became more and more beautiful as she grew up.",
+                grammar: "more and moreで「ますます〜」です。"
+            },
+            {
+                week: 5, id: "5-a-10", type: "anshou", topic: "比較級 and 比較級",
+                japanese: "ネットで本を買う人の数が増えてきている。",
+                english: "More and more people are buying books online.",
+                grammar: "More and more＋名詞で「ますます多くの〜」です。"
+            },
+
+            // ========== 第6週 ==========
+            // 第6週 音読例文1 (最上級)
+            {
+                week: 6, id: "6-o1-1", type: "ondoku", topic: "最上級",
+                japanese: "信濃川は日本で一番長い川です。",
+                english: "The Shinano is the longest river in Japan.",
+                grammar: "<span class='point'>the＋最上級＋in＋場所</span>で「〜で最も...」という意味です。"
+            },
+            {
+                week: 6, id: "6-o1-2", type: "ondoku", topic: "最上級",
+                japanese: "あなたのクラスで一番成績がいいのは誰ですか。",
+                english: "Who does (the) best in your class?",
+                grammar: "副詞の最上級では<span class='point'>the</span>は省略可能です。"
+            },
+            {
+                week: 6, id: "6-o1-3", type: "ondoku", topic: "最上級",
+                japanese: "2月は1年で一番寒い月です。",
+                english: "February is the coldest month of the year.",
+                grammar: "<span class='point'>of＋複数名詞</span>で最上級の範囲を示します。"
+            },
+            {
+                week: 6, id: "6-o1-4", type: "ondoku", topic: "最上級",
+                japanese: "ベスは3人姉妹の一番年下です。",
+                english: "Beth is the youngest of the three sisters.",
+                grammar: "<span class='point'>the＋最上級＋of＋数詞</span>で「〜のうちで最も...」という意味です。"
+            },
+            // 第6週 音読例文2 (one of the + 最上級 / 最上級 + ever)
+            {
+                week: 6, id: "6-o2-1", type: "ondoku", topic: "one of the＋最上級",
+                japanese: "インターネットは20世紀最大の発明の1つだった。",
+                english: "The Internet was one of the greatest inventions of the 20th century.",
+                grammar: "<span class='point'>one of the＋最上級＋複数名詞</span>で「最も...な〜の1つ」です。名詞は必ず複数形になります。"
+            },
+            {
+                week: 6, id: "6-o2-2", type: "ondoku", topic: "最上級＋ever",
+                japanese: "あなたがこれまでにしたなかで最も恥ずかしい経験は何ですか。",
+                english: "What's the most embarrassing experience you have ever had?",
+                grammar: "<span class='point'>最上級＋(that) S have ever done</span>で「これまで...したなかで最も〜」という意味です。"
+            },
+            {
+                week: 6, id: "6-o2-3", type: "ondoku", topic: "最上級＋ever",
+                japanese: "これは私がこれまでに読んだなかで最も面白い記事です。",
+                english: "This is one of the most interesting articles I have ever read.",
+                grammar: "「one of the＋最上級」と「ever」を組み合わせた表現です。"
+            },
+            {
+                week: 6, id: "6-o2-4", type: "ondoku", topic: "最上級＋ever",
+                japanese: "彼は史上最高のサッカー選手だ。",
+                english: "He is the greatest soccer player ever.",
+                grammar: "<span class='point'>ever</span>を単独で用いて「史上〜」という最上級を強調できます。"
+            },
+            // 第6週 音読例文3 (最上級の強調・劣等最上級・*番目)
+            {
+                week: 6, id: "6-o3-1", type: "ondoku", topic: "最上級の強調（by far）",
+                japanese: "トムはクラスで抜群に成績がよい生徒です。",
+                english: "Tom is by far the best student in the class.",
+                grammar: "<span class='point'>by far＋the＋最上級</span>で「抜群に〜」という強調を表します。"
+            },
+            {
+                week: 6, id: "6-o3-2", type: "ondoku", topic: "最上級の強調（very）",
+                japanese: "時差ぼけを避けるまさに最適の方法をお教えしましょう。",
+                english: "I'm going to show you the very best way to avoid jet lag.",
+                grammar: "<span class='point'>the very＋最上級</span>で「まさに最も〜」という強調です。"
+            },
+            {
+                week: 6, id: "6-o3-3", type: "ondoku", topic: "劣等最上級（least）",
+                japanese: "この店の一番安いワインでも50ドルします。",
+                english: "Even the least expensive bottle of wine in this shop costs 50 dollars.",
+                grammar: "<span class='point'>the least＋原級</span>で「最も...でない」という劣等最上級です。"
+            },
+            {
+                week: 6, id: "6-o3-4", type: "ondoku", topic: "序数詞＋最上級",
+                japanese: "大阪は日本で2番目に大きな都市です。",
+                english: "Osaka is the second largest city in Japan.",
+                grammar: "<span class='point'>序数詞＋最上級</span>で「〜番目に...」という意味です。"
+            },
+            // 第6週 音読例文4 (最上級相当の表現)
+            {
+                week: 6, id: "6-o4-1", type: "ondoku", topic: "最上級相当（no other）",
+                japanese: "世界の他のどんな山もエベレストほど高くない。／エベレストは世界の他のどんな山よりも高い。",
+                english: "No (other) mountain in the world is higher than Mt. Everest. / No (other) mountain in the world is as high as Mt. Everest. / Mt. Everest is higher than any (other) mountain in the world.",
+                grammar: "<span class='point'>No other＋単数名詞＋比較級/原級</span>または<span class='point'>比較級＋than any other＋単数名詞</span>で最上級と同じ意味を表せます。"
+            },
+            {
+                week: 6, id: "6-o4-2", type: "ondoku", topic: "最上級相当（nothing/anything）",
+                japanese: "時間ほど大切なものはない。／時間は他の何よりも大切だ。",
+                english: "Nothing (else) is more precious than time. / Nothing (else) is as precious as time. / Time is more precious than anything (else).",
+                grammar: "<span class='point'>Nothing (else)＋比較級/原級</span>で「〜ほど...なものはない」という最上級相当の表現です。"
+            },
+            // 第6週 暗唱例文
+            {
+                week: 6, id: "6-a-1", type: "anshou", topic: "最上級",
+                japanese: "信濃川は日本で一番長い川です。",
+                english: "The Shinano is the longest river in Japan.",
+                grammar: "the＋最上級＋in＋場所で「〜で最も...」です。"
+            },
+            {
+                week: 6, id: "6-a-2", type: "anshou", topic: "最上級",
+                japanese: "あなたのクラスで一番成績がいいのは誰ですか。",
+                english: "Who does (the) best in your class?",
+                grammar: "副詞の最上級ではtheは省略可能です。"
+            },
+            {
+                week: 6, id: "6-a-3", type: "anshou", topic: "最上級",
+                japanese: "2月は1年で一番寒い月です。",
+                english: "February is the coldest month of the year.",
+                grammar: "of the yearで「1年で」という範囲を示します。"
+            },
+            {
+                week: 6, id: "6-a-4", type: "anshou", topic: "one of the＋最上級",
+                japanese: "インターネットは20世紀最大の発明の1つだった。",
+                english: "The Internet was one of the greatest inventions of the 20th century.",
+                grammar: "one of the＋最上級＋複数名詞で「最も〜の1つ」です。"
+            },
+            {
+                week: 6, id: "6-a-5", type: "anshou", topic: "最上級＋ever",
+                japanese: "あなたがこれまでにしたなかで最も恥ずかしい経験は何ですか。",
+                english: "What's the most embarrassing experience you have ever had?",
+                grammar: "have ever doneで「これまでに〜した」です。"
+            },
+            {
+                week: 6, id: "6-a-6", type: "anshou", topic: "最上級の強調（by far）",
+                japanese: "トムはクラスで抜群に成績がよい生徒です。",
+                english: "Tom is by far the best student in the class.",
+                grammar: "by farで「抜群に」という強調を表します。"
+            },
+            {
+                week: 6, id: "6-a-7", type: "anshou", topic: "最上級の強調（very）",
+                japanese: "時差ぼけを避けるまさに最適の方法をお教えしましょう。",
+                english: "I'm going to show you the very best way to avoid jet lag.",
+                grammar: "the very bestで「まさに最高の」です。"
+            },
+            {
+                week: 6, id: "6-a-8", type: "anshou", topic: "序数詞＋最上級",
+                japanese: "大阪は日本で2番目に大きな都市です。",
+                english: "Osaka is the second largest city in Japan.",
+                grammar: "second＋最上級で「2番目に〜」です。"
+            },
+            {
+                week: 6, id: "6-a-9", type: "anshou", topic: "最上級相当（no other）",
+                japanese: "世界の他のどんな山もエベレストほど高くない。",
+                english: "No other mountain in the world is as high as Mt. Everest.",
+                grammar: "No other＋単数名詞で最上級と同じ意味を表します。"
+            },
+            {
+                week: 6, id: "6-a-10", type: "anshou", topic: "最上級相当（nothing）",
+                japanese: "時間は他の何よりも大切だ。",
+                english: "Time is more precious than anything else.",
+                grammar: "比較級＋than anything elseで最上級相当です。"
+            },
+
+            // ========== 第8週 ==========
+            // 第8週 音読例文1 (否定)
+            {
+                week: 8, id: "8-o1-1", type: "ondoku", topic: "否定（never）",
+                japanese: "彼女は決して私の言うことを聞かない。",
+                english: "She never listens to me.",
+                grammar: "<span class='point'>never</span>は「決して〜ない」という強い否定を表します。頻度の副詞なので動詞の前に置きます。"
+            },
+            {
+                week: 8, id: "8-o1-2", type: "ondoku", topic: "否定（never too...to）",
+                japanese: "学ぶのに遅すぎるということは決してない。",
+                english: "It's never too late to learn.",
+                grammar: "<span class='point'>It's never too late to do</span>で「〜するのに遅すぎるということはない」という意味です。"
+            },
+            {
+                week: 8, id: "8-o1-3", type: "ondoku", topic: "否定（no）",
+                japanese: "ここには親しい友達はいません。",
+                english: "I have no close friends here.",
+                grammar: "<span class='point'>no + 名詞</span>は「〜がない」という否定を表します。= I don't have any close friends here."
+            },
+            {
+                week: 8, id: "8-o1-4", type: "ondoku", topic: "否定（no...allowed）",
+                japanese: "生徒は1階のトイレを使うことは許されない。",
+                english: "No students are allowed to use the bathroom on the first floor.",
+                grammar: "<span class='point'>No + 名詞 + be allowed to do</span>で「〜は...することを許されない」という意味です。"
+            },
+            {
+                week: 8, id: "8-o1-5", type: "ondoku", topic: "否定（no idea）",
+                japanese: "君が何を話しているのかさっぱり分からない。",
+                english: "I have no idea what you are talking about.",
+                grammar: "<span class='point'>have no idea</span>で「全く分からない」という意味です。= I don't have any idea"
+            },
+            {
+                week: 8, id: "8-o1-6", type: "ondoku", topic: "否定（nothing at all）",
+                japanese: "何が起こっているのか全く知らなかった。",
+                english: "I knew nothing at all about what was going on.",
+                grammar: "<span class='point'>nothing at all</span>で「全く何も〜ない」という強い否定を表します。"
+            },
+            // 第8週 音読例文2 (部分否定)
+            {
+                week: 8, id: "8-o2-1", type: "ondoku", topic: "部分否定（not all）",
+                japanese: "クラスの全員が先生の言うことを理解したわけではなかった。",
+                english: "Not all the students in the class understood what the teacher said.",
+                grammar: "<span class='point'>Not all</span>は部分否定で「すべてが〜というわけではない」という意味です。"
+            },
+            {
+                week: 8, id: "8-o2-2", type: "ondoku", topic: "部分否定（not everyone）",
+                japanese: "誰もが宇宙飛行士になれるわけではない。",
+                english: "Not everyone can be an astronaut.",
+                grammar: "<span class='point'>Not everyone</span>は部分否定で「すべての人が〜というわけではない」という意味です。"
+            },
+            {
+                week: 8, id: "8-o2-3", type: "ondoku", topic: "部分否定（both...but）",
+                japanese: "あなたはスーザンか私のどちらかを選んでいいわ。でもどっちも選ぶというわけにはいかないの。",
+                english: "You can choose either Susan or me, but you can't choose both.",
+                grammar: "<span class='point'>can't ... both</span>で「両方とも〜というわけにはいかない」という部分否定です。"
+            },
+            {
+                week: 8, id: "8-o2-4", type: "ondoku", topic: "部分否定（not always）",
+                japanese: "よい弁護士を見つけるのは必ずしも簡単ではない。",
+                english: "Good lawyers are not always easy to find.",
+                grammar: "<span class='point'>not always</span>は部分否定で「いつも〜というわけではない」という意味です。"
+            },
+            // 第8週 音読例文3 (not)
+            {
+                week: 8, id: "8-o3-1", type: "ondoku", topic: "否定（not）",
+                japanese: "私はシェイクスピアの作品の大半を読んだことがあるが、『テンペスト』は読んでいない。",
+                english: "I've read most of Shakespeare's works, but not The Tempest.",
+                grammar: "文末の<span class='point'>but not ...</span>で「〜は除いて」という意味になります。"
+            },
+            {
+                week: 8, id: "8-o3-2", type: "ondoku", topic: "否定（I'm afraid not）",
+                japanese: "「行く準備はできた？」「できていません」",
+                english: '"Are you ready to go?" "I\'m afraid not."',
+                grammar: "<span class='point'>I'm afraid not</span>は「残念ながら〜ではない」という丁寧な否定表現です。"
+            },
+            {
+                week: 8, id: "8-o3-3", type: "ondoku", topic: "否定（I hope not）",
+                japanese: "「雨が降ると思いますか」「降らないといいですね」",
+                english: '"Do you think it will rain?" "I hope not."',
+                grammar: "<span class='point'>I hope not</span>は「そうでないことを願う」という意味です。"
+            },
+            {
+                week: 8, id: "8-o3-4", type: "ondoku", topic: "否定（not if）",
+                japanese: "「トニーの店」は素晴らしいレストランだよ。君がベジタリアンでなければの話だけどね。",
+                english: "Tony's is a great restaurant, but not if you are a vegetarian.",
+                grammar: "<span class='point'>but not if ...</span>で「〜の場合を除けば」という意味になります。"
+            },
+            {
+                week: 8, id: "8-o3-5", type: "ondoku", topic: "否定（I hope so）",
+                japanese: "「ジェニーはパーティに来ますか」「来るといいね」",
+                english: '"Is Jenny coming to the party?" "I hope so."',
+                grammar: "<span class='point'>I hope so</span>は「そうだといいね」という意味です。soは前の内容を指します。"
+            },
+            // 第8週 暗唱例文
+            {
+                week: 8, id: "8-a-1", type: "anshou", topic: "否定（never）",
+                japanese: "彼女は決して私の言うことを聞かない。",
+                english: "She never listens to me.",
+                grammar: "<span class='point'>never</span>は「決して〜ない」という否定です。"
+            },
+            {
+                week: 8, id: "8-a-2", type: "anshou", topic: "否定（no）",
+                japanese: "ここには親しい友達はいません。",
+                english: "I have no close friends here.",
+                grammar: "<span class='point'>no + 名詞</span>で「〜がない」という否定です。"
+            },
+            {
+                week: 8, id: "8-a-3", type: "anshou", topic: "否定（no...allowed）",
+                japanese: "生徒は1階のトイレを使うことは許されない。",
+                english: "No students are allowed to use the bathroom on the first floor.",
+                grammar: "<span class='point'>No + 名詞</span>が主語になる否定文です。"
+            },
+            {
+                week: 8, id: "8-a-4", type: "anshou", topic: "否定（nothing at all）",
+                japanese: "何が起こっているのか全く知らなかった。",
+                english: "I knew nothing at all about what was going on.",
+                grammar: "<span class='point'>nothing at all</span>で「全く何も〜ない」です。"
+            },
+            {
+                week: 8, id: "8-a-5", type: "anshou", topic: "部分否定（not all）",
+                japanese: "クラスの全員が先生の言うことを理解したわけではなかった。",
+                english: "Not all the students in the class understood what the teacher said.",
+                grammar: "<span class='point'>Not all</span>は部分否定です。"
+            },
+            {
+                week: 8, id: "8-a-6", type: "anshou", topic: "部分否定（both...but）",
+                japanese: "あなたはスーザンか私のどちらかを選んでいいわ。でもどっちも選ぶというわけにはいかないの。",
+                english: "You can choose either Susan or me, but you can't choose both.",
+                grammar: "<span class='point'>can't ... both</span>で部分否定です。"
+            },
+            {
+                week: 8, id: "8-a-7", type: "anshou", topic: "部分否定（not always）",
+                japanese: "よい弁護士を見つけるのは必ずしも簡単ではない。",
+                english: "Good lawyers are not always easy to find.",
+                grammar: "<span class='point'>not always</span>は部分否定です。"
+            },
+            {
+                week: 8, id: "8-a-8", type: "anshou", topic: "否定（not）",
+                japanese: "私はシェイクスピアの作品の大半を読んだことがあるが、『テンペスト』は読んでいない。",
+                english: "I've read most of Shakespeare's works, but not The Tempest.",
+                grammar: "<span class='point'>but not ...</span>で「〜は除いて」です。"
+            },
+            {
+                week: 8, id: "8-a-9", type: "anshou", topic: "否定（I'm afraid not）",
+                japanese: "「行く準備はできた？」「できていません」",
+                english: '"Are you ready to go?" "I\'m afraid not."',
+                grammar: "<span class='point'>I'm afraid not</span>は丁寧な否定表現です。"
+            },
+            {
+                week: 8, id: "8-a-10", type: "anshou", topic: "否定（not if）",
+                japanese: "「トニーの店」は素晴らしいレストランだよ。君がベジタリアンでなければの話だけどね。",
+                english: "Tony's is a great restaurant, but not if you are a vegetarian.",
+                grammar: "<span class='point'>but not if ...</span>で条件付きの否定です。"
+            },
+
+            // ========== 第9週 ==========
+            // 第9週 音読例文1 (準否定)
+            {
+                week: 9, id: "9-o1-1", type: "ondoku", topic: "準否定（hardly）",
+                japanese: "とても暗かったので、彼女の顔がほとんど見えなかった。",
+                english: "It was so dark that I could hardly see her face.",
+                grammar: "<span class='point'>hardly</span>は「ほとんど〜ない」という準否定語です。否定語を使わずに否定的な意味を表します。"
+            },
+            {
+                week: 9, id: "9-o1-2", type: "ondoku", topic: "準否定（hardly...anything）",
+                japanese: "彼女は野球についてはほとんど何も知らない。",
+                english: "She hardly knows anything about baseball.",
+                grammar: "<span class='point'>hardly ... anything</span>で「ほとんど何も〜ない」という意味です。"
+            },
+            {
+                week: 9, id: "9-o1-3", type: "ondoku", topic: "準否定（rarely）",
+                japanese: "父は仕事でとても忙しいのでめったに家にいない。",
+                english: "My father is so busy with his work that he is rarely at home.",
+                grammar: "<span class='point'>rarely</span>は「めったに〜ない」という準否定語です。"
+            },
+            {
+                week: 9, id: "9-o1-4", type: "ondoku", topic: "準否定（seldom）",
+                japanese: "マイクは私生活のことについてはめったに話さない。",
+                english: "Mike seldom talks about his private life.",
+                grammar: "<span class='point'>seldom</span>は「めったに〜ない」という準否定語で、rarelyと同義です。"
+            },
+            // 第9週 音読例文2 (few/little)
+            {
+                week: 9, id: "9-o2-1", type: "ondoku", topic: "準否定（few）",
+                japanese: "彼の過去について知っている人はほとんどいません。",
+                english: "There are few people who know about his past.",
+                grammar: "<span class='point'>few + 複数名詞</span>は「ほとんど〜ない」という準否定を表します。"
+            },
+            {
+                week: 9, id: "9-o2-2", type: "ondoku", topic: "準否定（little）",
+                japanese: "私たちはそれについて話す時間はほとんどありません。",
+                english: "We have little time to talk about it.",
+                grammar: "<span class='point'>little + 不可算名詞</span>は「ほとんど〜ない」という準否定を表します。"
+            },
+            {
+                week: 9, id: "9-o2-3", type: "ondoku", topic: "準否定（only a few）",
+                japanese: "彼の過去について知っている人はほんの少ししかいない。",
+                english: "There are only a few people who know about his past.",
+                grammar: "<span class='point'>only a few</span>は「ほんの少しの〜」という意味で、fewより肯定的なニュアンスです。"
+            },
+            {
+                week: 9, id: "9-o2-4", type: "ondoku", topic: "準否定（much）",
+                japanese: "私たちはそれについて話す時間はあまりありません。",
+                english: "We don't have much time to talk about it.",
+                grammar: "<span class='point'>don't have much</span>は「あまり〜がない」という意味です。"
+            },
+            {
+                week: 9, id: "9-o2-5", type: "ondoku", topic: "準否定（few friends）",
+                japanese: "1ヶ月前に来たばかりなので、ここには友だちはほとんどいません。",
+                english: "I have few friends here since I came just a month ago.",
+                grammar: "<span class='point'>few + 複数名詞</span>で「ほとんど〜ない」です。"
+            },
+            {
+                week: 9, id: "9-o2-6", type: "ondoku", topic: "準否定（little rain）",
+                japanese: "この夏はほとんど雨が降っていません。",
+                english: "We have had little rain this summer.",
+                grammar: "<span class='point'>little + 不可算名詞</span>で「ほとんど〜ない」です。rainは不可算名詞です。"
+            },
+            // 第9週 音読例文3 (no longer)
+            {
+                week: 9, id: "9-o3-1", type: "ondoku", topic: "no longer",
+                japanese: "彼はもうここでは働いていません。",
+                english: "He doesn't work here any longer.",
+                grammar: "<span class='point'>not ... any longer</span>で「もはや〜ない」という意味です。= He no longer works here."
+            },
+            {
+                week: 9, id: "9-o3-2", type: "ondoku", topic: "no longer（将来）",
+                japanese: "近い将来、宇宙旅行は誰にとってももはや単なる夢ではなくなるだろう。",
+                english: "In the near future, space travel will no longer be just a dream for everyone.",
+                grammar: "<span class='point'>no longer</span>は「もはや〜ない」という意味で、動詞の前に置きます。"
+            },
+            {
+                week: 9, id: "9-o3-3", type: "ondoku", topic: "no longer（言語）",
+                japanese: "世界の言語の約半数が100年後にはもはや話されなくなっているだろう。",
+                english: "About half of the languages in the world will no longer be spoken 100 years from now.",
+                grammar: "<span class='point'>no longer</span>の受動態での使用例です。"
+            },
+            {
+                week: 9, id: "9-o3-4", type: "ondoku", topic: "any more",
+                japanese: "もし私が億万長者だったら、もう働く必要はないだろう。",
+                english: "If I were a billionaire, I wouldn't have to work any more.",
+                grammar: "<span class='point'>not ... any more</span>で「もう〜ない」という意味です。仮定法過去との組み合わせ。"
+            },
+            // 第9週 暗唱例文
+            {
+                week: 9, id: "9-a-1", type: "anshou", topic: "準否定（hardly）",
+                japanese: "とても暗かったので、彼女の顔がほとんど見えなかった。",
+                english: "It was so dark that I could hardly see her face.",
+                grammar: "<span class='point'>hardly</span>は「ほとんど〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-2", type: "anshou", topic: "準否定（hardly...anything）",
+                japanese: "彼女は野球についてはほとんど何も知らない。",
+                english: "She hardly knows anything about baseball.",
+                grammar: "<span class='point'>hardly ... anything</span>で「ほとんど何も〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-3", type: "anshou", topic: "準否定（rarely）",
+                japanese: "父は仕事でとても忙しいのでめったに家にいない。",
+                english: "My father is so busy with his work that he is rarely at home.",
+                grammar: "<span class='point'>rarely</span>は「めったに〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-4", type: "anshou", topic: "準否定（seldom）",
+                japanese: "マイクは私生活のことについてはめったに話さない。",
+                english: "Mike seldom talks about his private life.",
+                grammar: "<span class='point'>seldom</span>は「めったに〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-5", type: "anshou", topic: "準否定（few）",
+                japanese: "彼の過去について知っている人はほとんどいません。",
+                english: "There are few people who know about his past.",
+                grammar: "<span class='point'>few + 複数名詞</span>で「ほとんど〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-6", type: "anshou", topic: "準否定（few friends）",
+                japanese: "1ヶ月前に来たばかりなので、ここには友だちはほとんどいません。",
+                english: "I have few friends here since I came just a month ago.",
+                grammar: "<span class='point'>few</span>は可算名詞に使います。"
+            },
+            {
+                week: 9, id: "9-a-7", type: "anshou", topic: "準否定（little）",
+                japanese: "私たちはそれについて話す時間はほとんどありません。",
+                english: "We have little time to talk about it.",
+                grammar: "<span class='point'>little + 不可算名詞</span>で「ほとんど〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-8", type: "anshou", topic: "no longer",
+                japanese: "彼はもうここでは働いていません。",
+                english: "He doesn't work here any longer.",
+                grammar: "<span class='point'>not ... any longer</span>で「もはや〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-9", type: "anshou", topic: "no longer（将来）",
+                japanese: "近い将来、宇宙旅行は誰にとってももはや単なる夢ではなくなるだろう。",
+                english: "In the near future, space travel will no longer be just a dream for everyone.",
+                grammar: "<span class='point'>no longer</span>は「もはや〜ない」です。"
+            },
+            {
+                week: 9, id: "9-a-10", type: "anshou", topic: "any more",
+                japanese: "もし私が億万長者だったら、もう働く必要はないだろう。",
+                english: "If I were a billionaire, I wouldn't have to work any more.",
+                grammar: "仮定法過去＋<span class='point'>not ... any more</span>の組み合わせです。"
+            },
+
+            // ========== 第10週 ==========
+            // 第10週 音読例文1 (関係代名詞)
+            {
+                week: 10, id: "10-o1-1", type: "ondoku", topic: "関係代名詞（who）",
+                japanese: "私にはカンフーの達人である友人がいます。",
+                english: "I have a friend who is a kung fu master.",
+                grammar: "<span class='point'>who</span>は人を先行詞とする主格の関係代名詞です。"
+            },
+            {
+                week: 10, id: "10-o1-2", type: "ondoku", topic: "関係代名詞（省略）",
+                japanese: "私が昨日話した少女は長い髪をしていた。",
+                english: "The girl I talked to yesterday had long hair.",
+                grammar: "目的格の関係代名詞（whom/that）は<span class='point'>省略可能</span>です。"
+            },
+            {
+                week: 10, id: "10-o1-3", type: "ondoku", topic: "関係代名詞（which）",
+                japanese: "冷蔵庫にあったサンドイッチはどこですか。",
+                english: "Where is the sandwich which was in the fridge?",
+                grammar: "<span class='point'>which</span>は物を先行詞とする関係代名詞です。"
+            },
+            {
+                week: 10, id: "10-o1-4", type: "ondoku", topic: "関係代名詞（省略）",
+                japanese: "私がその店で買ったオレンジは全部腐っていた。",
+                english: "The oranges I bought at the shop were all bad.",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            {
+                week: 10, id: "10-o1-5", type: "ondoku", topic: "関係代名詞（省略）",
+                japanese: "私たちが昨晩行ったレストランの名前は何ですか。",
+                english: "What's the name of the restaurant we went to last night?",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            {
+                week: 10, id: "10-o1-6", type: "ondoku", topic: "関係代名詞（省略）",
+                japanese: "これが私がずっと読みたかった本です。",
+                english: "This is the book I have long wanted to read.",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            // 第10週 音読例文2 (that)
+            {
+                week: 10, id: "10-o2-1", type: "ondoku", topic: "関係代名詞（that）",
+                japanese: "これは私が今までに読んだなかで最も面白い本です。",
+                english: "This is the most interesting book (that) I have ever read.",
+                grammar: "先行詞に<span class='point'>最上級</span>がつく場合、thatが好まれます。"
+            },
+            {
+                week: 10, id: "10-o2-2", type: "ondoku", topic: "関係代名詞（that）",
+                japanese: "勝つことだけが重要なのではありません。",
+                english: "Winning isn't the only thing that matters.",
+                grammar: "先行詞に<span class='point'>the only</span>がつく場合、thatが好まれます。"
+            },
+            {
+                week: 10, id: "10-o2-3", type: "ondoku", topic: "関係代名詞（that）",
+                japanese: "君のポケットに入っているものを全て見せなさい。",
+                english: "Show me everything that is in your pocket.",
+                grammar: "先行詞が<span class='point'>everything</span>などの場合、thatが好まれます。"
+            },
+            {
+                week: 10, id: "10-o2-4", type: "ondoku", topic: "関係代名詞（that）",
+                japanese: "私たちはその島を作ってきた人々と歴史について学んだ。",
+                english: "We learned about the people and the history that have shaped the island.",
+                grammar: "先行詞が<span class='point'>人＋物</span>の場合、thatを使います。"
+            },
+            // 第10週 音読例文3 (whose)
+            {
+                week: 10, id: "10-o3-1", type: "ondoku", topic: "関係代名詞（whose）",
+                japanese: "ドアが黄色く塗られている家が私たちのです。",
+                english: "The house whose door is painted yellow is ours.",
+                grammar: "<span class='point'>whose</span>は所有格の関係代名詞です。「〜の...が」という意味になります。"
+            },
+            {
+                week: 10, id: "10-o3-2", type: "ondoku", topic: "関係代名詞（whose）",
+                japanese: "目が緑色の猫を見ませんでしたか。",
+                english: "Didn't you see the cat whose eyes are green?",
+                grammar: "<span class='point'>whose</span>は動物にも使えます。"
+            },
+            {
+                week: 10, id: "10-o3-3", type: "ondoku", topic: "関係代名詞（whose）",
+                japanese: "意味の分からない単語が少しあります。",
+                english: "There are a few words whose meanings I don't know.",
+                grammar: "<span class='point'>whose</span>は物にも使えます。"
+            },
+            {
+                week: 10, id: "10-o3-4", type: "ondoku", topic: "関係代名詞（whose）",
+                japanese: "ジムは私がその兄をよく知っている少年です。",
+                english: "Jim is the boy whose brother I know very well.",
+                grammar: "<span class='point'>whose + 名詞</span>が目的語になる場合です。"
+            },
+            // 第10週 暗唱例文
+            {
+                week: 10, id: "10-a-1", type: "anshou", topic: "関係代名詞（省略）",
+                japanese: "私が昨日話した少女は長い髪をしていた。",
+                english: "The girl I talked to yesterday had long hair.",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            {
+                week: 10, id: "10-a-2", type: "anshou", topic: "関係代名詞（省略）",
+                japanese: "私がその店で買ったオレンジは全部腐っていた。",
+                english: "The oranges I bought at the shop were all bad.",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            {
+                week: 10, id: "10-a-3", type: "anshou", topic: "関係代名詞（省略）",
+                japanese: "私たちが昨晩行ったレストランの名前は何ですか。",
+                english: "What's the name of the restaurant we went to last night?",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            {
+                week: 10, id: "10-a-4", type: "anshou", topic: "関係代名詞（省略）",
+                japanese: "これが私がずっと読みたかった本です。",
+                english: "This is the book I have long wanted to read.",
+                grammar: "目的格の関係代名詞は<span class='point'>省略</span>されています。"
+            },
+            {
+                week: 10, id: "10-a-5", type: "anshou", topic: "関係代名詞（that）",
+                japanese: "勝つことだけが重要なのではありません。",
+                english: "Winning isn't the only thing that matters.",
+                grammar: "<span class='point'>the only</span>が先行詞につく場合thatを使います。"
+            },
+            {
+                week: 10, id: "10-a-6", type: "anshou", topic: "関係代名詞（that）",
+                japanese: "君のポケットに入っているものを全て見せなさい。",
+                english: "Show me everything that is in your pocket.",
+                grammar: "<span class='point'>everything</span>が先行詞の場合thatを使います。"
+            },
+            {
+                week: 10, id: "10-a-7", type: "anshou", topic: "関係代名詞（that）",
+                japanese: "私たちはその島を作ってきた人々と歴史について学んだ。",
+                english: "We learned about the people and the history that have shaped the island.",
+                grammar: "<span class='point'>人＋物</span>が先行詞の場合thatを使います。"
+            },
+            {
+                week: 10, id: "10-a-8", type: "anshou", topic: "関係代名詞（whose）",
+                japanese: "ドアが黄色く塗られている家が私たちのです。",
+                english: "The house whose door is painted yellow is ours.",
+                grammar: "<span class='point'>whose</span>は所有格の関係代名詞です。"
+            },
+            {
+                week: 10, id: "10-a-9", type: "anshou", topic: "関係代名詞（whose）",
+                japanese: "目が緑色の猫を見ませんでしたか。",
+                english: "Didn't you see the cat whose eyes are green?",
+                grammar: "<span class='point'>whose</span>は動物にも使えます。"
+            },
+            {
+                week: 10, id: "10-a-10", type: "anshou", topic: "関係代名詞（whose）",
+                japanese: "意味の分からない単語が少しあります。",
+                english: "There are a few words whose meanings I don't know.",
+                grammar: "<span class='point'>whose</span>は物にも使えます。"
+            },
+
+            // ========== 第11週 ==========
+            // 第11週 音読例文1 (前置詞＋関係代名詞)
+            {
+                week: 11, id: "11-o1-1", type: "ondoku", topic: "前置詞＋関係代名詞（in which）",
+                japanese: "これは彼が住んでいる家です。",
+                english: "This is the house in which he lives.",
+                grammar: "<span class='point'>前置詞 + which</span>の形で「〜の中で」などの意味を表します。= the house which he lives in"
+            },
+            {
+                week: 11, id: "11-o1-2", type: "ondoku", topic: "前置詞＋関係代名詞（with whom）",
+                japanese: "ジェーンは私が一緒に通学している女の子です。",
+                english: "Jane is the girl with whom I go to school.",
+                grammar: "<span class='point'>前置詞 + whom</span>は人を先行詞とする場合に使います。"
+            },
+            {
+                week: 11, id: "11-o1-3", type: "ondoku", topic: "前置詞＋関係代名詞（for whom）",
+                japanese: "私の上司たちはとても親切です。",
+                english: "The people for whom I work are very nice.",
+                grammar: "<span class='point'>for whom</span>で「〜のために働く」という意味です。"
+            },
+            {
+                week: 11, id: "11-o1-4", type: "ondoku", topic: "前置詞＋関係代名詞（in which）",
+                japanese: "私が子供のころよく遊んだ小さな公園はもう存在しません。",
+                english: "The small park in which I used to play as a child no longer exists.",
+                grammar: "<span class='point'>in which</span>で「〜の中で」という場所を表します。"
+            },
+            {
+                week: 11, id: "11-o1-5", type: "ondoku", topic: "前置詞＋関係代名詞（to which）",
+                japanese: "学生が参考にできる情報源が非常に少ない。",
+                english: "There are very few information sources to which students can refer.",
+                grammar: "<span class='point'>to which</span>で「〜に参照する」という意味です。refer toのtoが前に出ています。"
+            },
+            {
+                week: 11, id: "11-o1-6", type: "ondoku", topic: "前置詞＋関係代名詞（of which）",
+                japanese: "自分が属する社会のために一生懸命働かなくてはならない。",
+                english: "You must work hard for the good of the society of which you are a part.",
+                grammar: "<span class='point'>of which</span>で「〜の一部である」という意味です。be a part ofのofが前に出ています。"
+            },
+            // 第11週 音読例文2 (what)
+            {
+                week: 11, id: "11-o2-1", type: "ondoku", topic: "関係代名詞（what）",
+                japanese: "それがあなたの言いたいことですか。",
+                english: "Is that what you mean?",
+                grammar: "<span class='point'>what</span>は「〜すること/もの」という意味で、先行詞を含む関係代名詞です。= the thing which"
+            },
+            {
+                week: 11, id: "11-o2-2", type: "ondoku", topic: "関係代名詞（what）",
+                japanese: "私はあなたに対してしたことを深く後悔しています。",
+                english: "I deeply regret what I did to you.",
+                grammar: "<span class='point'>what I did</span>で「私がしたこと」という意味です。"
+            },
+            {
+                week: 11, id: "11-o2-3", type: "ondoku", topic: "関係代名詞（what）",
+                japanese: "私が困っているのは、妻の気がコロコロ変わることだ。",
+                english: "What bothers me is that my wife is always changing her mind.",
+                grammar: "<span class='point'>What bothers me</span>は「私を困らせること」という主語です。"
+            },
+            {
+                week: 11, id: "11-o2-4", type: "ondoku", topic: "関係代名詞（what）",
+                japanese: "ジェーンを特別なものにしているのは、素晴らしい音楽の才能だ。",
+                english: "What makes Jane so special is her amazing talent in music.",
+                grammar: "<span class='point'>What makes ... special</span>で「〜を特別にするもの」という意味です。"
+            },
+            {
+                week: 11, id: "11-o2-5", type: "ondoku", topic: "関係代名詞（all）",
+                japanese: "その事故について私が知っているのはそれだけです。",
+                english: "That's all I know about the accident.",
+                grammar: "<span class='point'>all (that) I know</span>で「私が知っていることすべて」です。thatは省略可能。"
+            },
+            {
+                week: 11, id: "11-o2-6", type: "ondoku", topic: "関係代名詞（all）",
+                japanese: "私が彼女にしてやれるのはそれだけだった。",
+                english: "That was all I could do for her.",
+                grammar: "<span class='point'>all I could do</span>で「私ができたことすべて」です。"
+            },
+            {
+                week: 11, id: "11-o2-7", type: "ondoku", topic: "関係代名詞（all）",
+                japanese: "ボタンを押すだけでいいのです。",
+                english: "All you have to do is to push the button.",
+                grammar: "<span class='point'>All you have to do is (to) do</span>で「〜しさえすればよい」という意味です。"
+            },
+            {
+                week: 11, id: "11-o2-8", type: "ondoku", topic: "関係代名詞（all）",
+                japanese: "すべての部品を切り抜いた後は、それを組み立てるだけでいいのです。",
+                english: "After all the parts are cut out, all you have to do is put them together.",
+                grammar: "<span class='point'>All you have to do is do</span>でtoは省略可能です。"
+            },
+            // 第11週 暗唱例文
+            {
+                week: 11, id: "11-a-1", type: "anshou", topic: "前置詞＋関係代名詞（with whom）",
+                japanese: "ジェーンは私が一緒に通学している女の子です。",
+                english: "Jane is the girl with whom I go to school.",
+                grammar: "<span class='point'>with whom</span>で「〜と一緒に」です。"
+            },
+            {
+                week: 11, id: "11-a-2", type: "anshou", topic: "前置詞＋関係代名詞（for whom）",
+                japanese: "私の上司たちはとても親切です。",
+                english: "The people for whom I work are very nice.",
+                grammar: "<span class='point'>for whom</span>で「〜のために」です。"
+            },
+            {
+                week: 11, id: "11-a-3", type: "anshou", topic: "前置詞＋関係代名詞（in which）",
+                japanese: "私が子供のころよく遊んだ小さな公園はもう存在しません。",
+                english: "The small park in which I used to play as a child no longer exists.",
+                grammar: "<span class='point'>in which</span>で場所を表します。"
+            },
+            {
+                week: 11, id: "11-a-4", type: "anshou", topic: "前置詞＋関係代名詞（to which）",
+                japanese: "学生が参考にできる情報源が非常に少ない。",
+                english: "There are very few information sources to which students can refer.",
+                grammar: "<span class='point'>to which</span>でrefer toを表します。"
+            },
+            {
+                week: 11, id: "11-a-5", type: "anshou", topic: "関係代名詞（what）",
+                japanese: "それがあなたの言いたいことですか。",
+                english: "Is that what you mean?",
+                grammar: "<span class='point'>what</span>は先行詞を含む関係代名詞です。"
+            },
+            {
+                week: 11, id: "11-a-6", type: "anshou", topic: "関係代名詞（what）",
+                japanese: "私はあなたに対してしたことを深く後悔しています。",
+                english: "I deeply regret what I did to you.",
+                grammar: "<span class='point'>what I did</span>で「私がしたこと」です。"
+            },
+            {
+                week: 11, id: "11-a-7", type: "anshou", topic: "関係代名詞（what）",
+                japanese: "私が困っているのは、妻の気がコロコロ変わることだ。",
+                english: "What bothers me is that my wife is always changing her mind.",
+                grammar: "<span class='point'>What bothers me</span>が主語です。"
+            },
+            {
+                week: 11, id: "11-a-8", type: "anshou", topic: "関係代名詞（what）",
+                japanese: "ジェーンを特別なものにしているのは、素晴らしい音楽の才能だ。",
+                english: "What makes Jane so special is her amazing talent in music.",
+                grammar: "<span class='point'>What makes ... special</span>で「〜を特別にするもの」です。"
+            },
+            {
+                week: 11, id: "11-a-9", type: "anshou", topic: "関係代名詞（all）",
+                japanese: "私が彼女にしてやれるのはそれだけだった。",
+                english: "That was all I could do for her.",
+                grammar: "<span class='point'>all I could do</span>で「私ができたことすべて」です。"
+            },
+            {
+                week: 11, id: "11-a-10", type: "anshou", topic: "関係代名詞（all）",
+                japanese: "すべての部品を切り抜いた後は、それを組み立てるだけでいいのです。",
+                english: "After all the parts are cut out, all you have to do is put them together.",
+                grammar: "<span class='point'>All you have to do is do</span>で「〜しさえすればよい」です。"
+            },
+
+            // ========== 第12週 ==========
+            // 第12週 音読例文1 (関係代名詞・非制限用法)
+            {
+                week: 12, id: "12-o1-1", type: "ondoku", topic: "非制限用法（who）",
+                japanese: "ジョーンズ氏は隣に住んでいますが、とても親切です。",
+                english: "Mr. Jones, who lives next door, is very nice.",
+                grammar: "<span class='point'>非制限用法</span>ではコンマで区切り、先行詞に補足情報を加えます。"
+            },
+            {
+                week: 12, id: "12-o1-2", type: "ondoku", topic: "非制限用法（which）",
+                japanese: "このお菓子は米から作られているが、米は日本人の主な食料源である。",
+                english: "This cake is made from rice, which is the main food source for Japanese.",
+                grammar: "<span class='point'>非制限用法のwhich</span>は前の文全体や一部を先行詞にできます。"
+            },
+            {
+                week: 12, id: "12-o1-3", type: "ondoku", topic: "非制限用法（who）",
+                japanese: "トムは私たちのクラスで一番優秀な生徒ですが、サッカー部に所属しています。",
+                english: "Tom, who is the best student in our class, belongs to the soccer club.",
+                grammar: "<span class='point'>非制限用法</span>で追加情報を述べています。"
+            },
+            {
+                week: 12, id: "12-o1-4", type: "ondoku", topic: "非制限用法（whose）",
+                japanese: "私の英語の先生は、名前が思い出せないのですが、とてもハンサムです。",
+                english: "My English teacher, whose name I forget, is very handsome.",
+                grammar: "<span class='point'>非制限用法のwhose</span>も使えます。"
+            },
+            {
+                week: 12, id: "12-o1-5", type: "ondoku", topic: "非制限用法（which）",
+                japanese: "彼は新しいメガネを買ったが、それを翌日になくしてしまった。",
+                english: "He bought a new pair of glasses, which he lost the next day.",
+                grammar: "<span class='point'>非制限用法のwhich</span>で前の名詞句を受けています。"
+            },
+            {
+                week: 12, id: "12-o1-6", type: "ondoku", topic: "非制限用法（which）",
+                japanese: "彼女はついに秘書としての仕事に就き、それをとても楽しんでいる。",
+                english: "She finally got a job as a secretary, which she is enjoying very much.",
+                grammar: "<span class='point'>非制限用法のwhich</span>で前の内容を受けています。"
+            },
+            // 第12週 音読例文2 (関係代名詞・非制限用法)
+            {
+                week: 12, id: "12-o2-1", type: "ondoku", topic: "非制限用法（with whom）",
+                japanese: "ジェーンは私が一緒に通学している子ですが、私の親友です。",
+                english: "Jane, with whom I go to school, is my best friend.",
+                grammar: "<span class='point'>非制限用法</span>でも前置詞＋関係代名詞が使えます。"
+            },
+            {
+                week: 12, id: "12-o2-2", type: "ondoku", topic: "非制限用法（in which）",
+                japanese: "彼は長いスピーチをし、その中で友だちや同僚の支援を感謝した。",
+                english: "He gave a long speech, in which he thanked his friends and colleagues for their support.",
+                grammar: "<span class='point'>in which</span>で「その中で」という意味です。"
+            },
+            {
+                week: 12, id: "12-o2-3", type: "ondoku", topic: "非制限用法（without which）",
+                japanese: "コンパスを持っていくのを忘れないように。それがないと道に迷ってしまいますよ。",
+                english: "Don't forget to take a compass with you, without which you would be lost.",
+                grammar: "<span class='point'>without which</span>で「それがなければ」という意味です。"
+            },
+            {
+                week: 12, id: "12-o2-4", type: "ondoku", topic: "非制限用法（all of whom）",
+                japanese: "パーティには20人の客がいたが、皆私の知り合いだった。",
+                english: "There were 20 guests at the party, all of whom I knew.",
+                grammar: "<span class='point'>all of whom</span>で「その全員が」という意味です。"
+            },
+            {
+                week: 12, id: "12-o2-5", type: "ondoku", topic: "非制限用法（none of which）",
+                japanese: "彼女は6足の靴を試着したが、どれも気に入らなかった。",
+                english: "She tried on six pairs of shoes, none of which she liked.",
+                grammar: "<span class='point'>none of which</span>で「そのどれも〜ない」という意味です。"
+            },
+            {
+                week: 12, id: "12-o2-6", type: "ondoku", topic: "非制限用法（neither of which）",
+                japanese: "私は彼女に2通のメールを送ったが、彼女はどちらにも返事をしていない。",
+                english: "I sent her two emails, neither of which she has replied to.",
+                grammar: "<span class='point'>neither of which</span>で「そのどちらも〜ない」という意味です。"
+            },
+            {
+                week: 12, id: "12-o2-7", type: "ondoku", topic: "非制限用法（the youngest of whom）",
+                japanese: "彼には3人息子がいて、一番年下は3歳です。",
+                english: "He has three sons, the youngest of whom is 3 years old.",
+                grammar: "<span class='point'>the youngest of whom</span>で「そのうち一番若いのが」という意味です。"
+            },
+            // 第12週 音読例文3 (関係代名詞・非制限用法・文全体)
+            {
+                week: 12, id: "12-o3-1", type: "ondoku", topic: "非制限用法（which・文全体）",
+                japanese: "ジョンは皆に自分は結婚していないと言っていたが、それはうそだった。",
+                english: "John told everyone he wasn't married, which was a lie.",
+                grammar: "<span class='point'>非制限用法のwhich</span>は前の文全体を先行詞にできます。"
+            },
+            {
+                week: 12, id: "12-o3-2", type: "ondoku", topic: "非制限用法（which・文全体）",
+                japanese: "私は明日で20歳になりますが、それがとても信じられません。",
+                english: "I'm turning 20 tomorrow, which I can hardly believe.",
+                grammar: "<span class='point'>which</span>が前の文全体を受けています。"
+            },
+            {
+                week: 12, id: "12-o3-3", type: "ondoku", topic: "非制限用法（which・文全体）",
+                japanese: "一日中雨だったが、それは残念なことだった。",
+                english: "It rained all day, which was a shame.",
+                grammar: "<span class='point'>which</span>が「雨が一日中降ったこと」全体を受けています。"
+            },
+            {
+                week: 12, id: "12-o3-4", type: "ondoku", topic: "非制限用法（which・文全体）",
+                japanese: "彼女は泣き始めたが、私はそれを予想していなかった。",
+                english: "She began to weep, which I hadn't expected.",
+                grammar: "<span class='point'>which</span>が「彼女が泣き始めたこと」を受けています。"
+            },
+            // 第12週 暗唱例文
+            {
+                week: 12, id: "12-a-1", type: "anshou", topic: "非制限用法（who）",
+                japanese: "ジョーンズ氏は隣に住んでいますが、とても親切です。",
+                english: "Mr. Jones, who lives next door, is very nice.",
+                grammar: "<span class='point'>非制限用法</span>はコンマで区切ります。"
+            },
+            {
+                week: 12, id: "12-a-2", type: "anshou", topic: "非制限用法（which）",
+                japanese: "このお菓子は米から作られているが、米は日本人の主な食料源である。",
+                english: "This cake is made from rice, which is the main food source for Japanese.",
+                grammar: "<span class='point'>非制限用法のwhich</span>です。"
+            },
+            {
+                week: 12, id: "12-a-3", type: "anshou", topic: "非制限用法（whose）",
+                japanese: "私の英語の先生は、名前が思い出せないのですが、とてもハンサムです。",
+                english: "My English teacher, whose name I forget, is very handsome.",
+                grammar: "<span class='point'>非制限用法のwhose</span>です。"
+            },
+            {
+                week: 12, id: "12-a-4", type: "anshou", topic: "非制限用法（which）",
+                japanese: "彼は新しいメガネを買ったが、それを翌日になくしてしまった。",
+                english: "He bought a new pair of glasses, which he lost the next day.",
+                grammar: "<span class='point'>非制限用法のwhich</span>が名詞句を受けています。"
+            },
+            {
+                week: 12, id: "12-a-5", type: "anshou", topic: "非制限用法（in which）",
+                japanese: "彼は長いスピーチをし、その中で友だちや同僚の支援を感謝した。",
+                english: "He gave a long speech, in which he thanked his friends and colleagues for their support.",
+                grammar: "<span class='point'>前置詞＋which</span>の非制限用法です。"
+            },
+            {
+                week: 12, id: "12-a-6", type: "anshou", topic: "非制限用法（without which）",
+                japanese: "コンパスを持っていくのを忘れないように。それがないと道に迷ってしまいますよ。",
+                english: "Don't forget to take a compass with you, without which you would be lost.",
+                grammar: "<span class='point'>without which</span>で「それがなければ」です。"
+            },
+            {
+                week: 12, id: "12-a-7", type: "anshou", topic: "非制限用法（none of which）",
+                japanese: "彼女は6足の靴を試着したが、どれも気に入らなかった。",
+                english: "She tried on six pairs of shoes, none of which she liked.",
+                grammar: "<span class='point'>none of which</span>で「そのどれも〜ない」です。"
+            },
+            {
+                week: 12, id: "12-a-8", type: "anshou", topic: "非制限用法（neither of which）",
+                japanese: "私は彼女に2通のメールを送ったが、彼女はどちらにも返事をしていない。",
+                english: "I sent her two emails, neither of which she has replied to.",
+                grammar: "<span class='point'>neither of which</span>で「そのどちらも〜ない」です。"
+            },
+            {
+                week: 12, id: "12-a-9", type: "anshou", topic: "非制限用法（which・文全体）",
+                japanese: "ジョンは皆に自分は結婚していないと言っていたが、それはうそだった。",
+                english: "John told everyone he wasn't married, which was a lie.",
+                grammar: "<span class='point'>which</span>が前の文全体を受けています。"
+            },
+            {
+                week: 12, id: "12-a-10", type: "anshou", topic: "非制限用法（which・文全体）",
+                japanese: "私は明日で20歳になりますが、それがとても信じられません。",
+                english: "I'm turning 20 tomorrow, which I can hardly believe.",
+                grammar: "<span class='point'>which</span>が前の文全体を受けています。"
+            }
+        ];
+
+        let currentWeek = 'all';
+        let currentType = 'all';
+        let currentFilter = 'all';
+        let currentIndex = 0;
+        let filteredQuestions = [];
+        let ratings = {};
+        let answerShown = false;
+
+        // LocalStorageから読み込み
+        function loadRatings() {
+            const saved = localStorage.getItem('tetsuryoku-quiz-ratings-v2');
+            if (saved) {
+                ratings = JSON.parse(saved);
+            }
+        }
+
+        // LocalStorageに保存
+        function saveRatings() {
+            localStorage.setItem('tetsuryoku-quiz-ratings-v2', JSON.stringify(ratings));
+        }
+
+        // 統計を更新
+        function updateStats() {
+            const filtered = getFilteredQuestions();
+            let correct = 0, unsure = 0, wrong = 0;
+            filtered.forEach(q => {
+                const r = ratings[q.id];
+                if (r === 'correct') correct++;
+                else if (r === 'unsure') unsure++;
+                else if (r === 'wrong') wrong++;
+            });
+            document.getElementById('total-count').textContent = filtered.length;
+            document.getElementById('correct-count').textContent = correct;
+            document.getElementById('unsure-count').textContent = unsure;
+            document.getElementById('wrong-count').textContent = wrong;
+        }
+
+        // 問題をフィルタリング
+        function getFilteredQuestions() {
+            return questions.filter(q => {
+                // 週のフィルタ
+                if (currentWeek !== 'all' && q.week !== parseInt(currentWeek)) return false;
+                // タイプのフィルタ
+                if (currentType !== 'all' && q.type !== currentType) return false;
+                // 回答状態のフィルタ
+                const rating = ratings[q.id];
+                if (currentFilter === 'all') return true;
+                if (currentFilter === 'correct') return rating === 'correct';
+                if (currentFilter === 'unsure') return rating === 'unsure';
+                if (currentFilter === 'wrong') return rating === 'wrong';
+                if (currentFilter === 'unanswered') return !rating;
+                return true;
+            });
+        }
+
+        // 進捗を更新
+        function updateProgress() {
+            const total = filteredQuestions.length;
+            const current = Math.min(currentIndex + 1, total);
+            document.getElementById('progress-text').textContent = `${current} / ${total}`;
+            const percentage = total > 0 ? (current / total) * 100 : 0;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+        }
+
+        // キーフレーズを抽出（文法ポイントから）
+        function extractKeyPhrases(grammar, english) {
+            const phrases = [];
+            // <span class='point'>...</span> からキーフレーズを抽出
+            const pointMatches = grammar.match(/<span class='point'>([^<]+)<\/span>/g);
+            if (pointMatches) {
+                pointMatches.forEach(match => {
+                    const phrase = match.replace(/<span class='point'>|<\/span>/g, '');
+                    if (phrase && !phrases.includes(phrase)) {
+                        phrases.push(phrase);
+                    }
+                });
+            }
+            return phrases;
+        }
+
+        // 重要語彙を抽出
+        function extractVocabulary(english) {
+            const vocabMap = {
+                'injured': '負傷した',
+                'taken to': '〜に運ばれる',
+                'kept saying': '言い続けた',
+                'over and over': '何度も',
+                'by the window': '窓辺に',
+                'sound strange': '奇妙に聞こえる',
+                'buy you a drink': '一杯ごちそうする',
+                'found it easy': '〜が簡単だと分かった',
+                'help me decide': '決めるのを手伝う',
+                'heard my name called': '名前が呼ばれるのを聞いた',
+                'be seen crying': '泣いているのを見られる',
+                'was made to stay': '居残りをさせられた',
+                'have your picture done': '写真を撮ってもらう',
+                'stamps and coins': '切手とコイン',
+                'forget things': '物を忘れる',
+                'beautiful works': '美しい作品',
+                'Most of the students': '学生の大半',
+                'the poor': '貧しい人々',
+                'once or twice a week': '週に1、2回',
+                'excited audience': '興奮した観客',
+                'stop applauding': '拍手をやめる',
+                'sat watching': '座って見ていた',
+                'What seems to be': '何が〜のようだ',
+                'advised me to': '私に〜するよう勧めた',
+                'lose weight': '減量する',
+                'was seen to drive off': '走り去るのが見られた',
+                'black van': '黒いワゴン車',
+                'had our baggage taken': '荷物を運んでもらった',
+                'was very helpful': 'とても助けになった',
+                'equipment': '装備',
+                'population': '人口',
+                'that of': '〜のそれ',
+                'gasoline': 'ガソリン',
+                'eraser': '消しゴム',
+                'convenience stores': 'コンビニ',
+                'on the wrong feet': '左右逆に',
+                'Take them off': '脱ぎなさい',
+                'bring it back': '返す',
+                'give it to me': '私によこす',
+                'snowed a lot': 'たくさん雪が降った',
+                'turn on': '〜をつける',
+                'air conditioner': 'エアコン',
+                'How far': 'どのくらいの距離',
+                'nearest station': '一番近い駅',
+                'What day': '何曜日',
+                'It took him': '彼は〜かかった',
+                'repair': '修理する',
+                'get better': '治る',
+                'It cost us': '私たちは〜かかった',
+                'travel around': '旅行する',
+                'You never know': '決して分からない',
+                'itadakimasu': 'いただきます',
+                'They say': '〜といううわさだ',
+                'get married': '結婚する',
+                'express': '表現する',
+                'thoughts': '考え',
+                'introduced herself': '自己紹介した',
+                'Help yourself to': '自由にとって食べて',
+                'make myself understood': '通じる',
+                'live by himself': '一人暮らし',
+                'at the age of': '〜歳の時に',
+                'I myself': '私自身',
+                'itself': 'そのもの',
+                'Both of': '両方とも',
+                'were late for': '〜に遅刻した',
+                'either by': 'どちらかで',
+                'Either day': 'どちらの日でも',
+                'fine with me': '私は大丈夫',
+                'Neither of them': 'どちらも〜ない',
+                'neither smokes nor drinks': '煙草も吸わないし酒も飲まない',
+                'doesn\'t drink, either': '酒も飲まない',
+                'Every student': 'クラスの皆',
+                'was shocked': 'ショックを受けた',
+                'Each team': 'それぞれのチーム',
+                'its own': '独自の',
+                'mascot': 'マスコット',
+                'Each of us': '私たち一人一人',
+                'different opinion': '違った考え',
+                'None of': 'どれも〜ない',
+                'some reason': '何らかの理由',
+                'behavior': '行動',
+                'Ask any teacher': 'どんな先生に聞いても',
+                'something important': '重要なこと',
+                'somewhere': 'どこかに',
+                'anywhere': 'どこにも',
+                'anything else': '他に何か',
+                'show me another': '別のを見せて',
+                'the others': '残りの人たち',
+                'the other': 'もう一方',
+                'the other side': '反対側',
+                'the other students': '他の生徒',
+                'Some were': '〜もいれば',
+                'others were': '...もいた',
+                'each other': 'お互いに',
+                'more scared': 'もっと怖がって',
+                'a larger house': 'もっと大きな家',
+                'somewhere quieter': 'もっと静かな場所',
+                'taller than': 'より背が高い',
+                'more often than': 'より頻繁に',
+                'busier on': '〜の方が忙しい',
+                'as well as': '〜と同じくらい上手に',
+                'as old as': '〜と同じくらいの年齢',
+                'as hard as': '〜と同じくらい熱心に',
+                'as good a singer': '同じくらい上手い歌手',
+                'as fast as I could': '全速力で',
+                'as soon as possible': 'できるだけ早く',
+                'that of Mexico': 'メキシコのそれ',
+                'used to be': '以前は〜だった',
+                'more famous': 'より有名',
+                'the States': 'アメリカ',
+                'worse than': 'より悪い',
+                'had expected': '予想していた',
+                'than usual': 'いつもより',
+                'more crowded': 'より混んでいる',
+                'look older': '老けて見える',
+                'much better': 'ずっと良い',
+                'far more expensive': 'はるかに高い',
+                'a lot more': 'ずっと多くの',
+                'a little more slowly': 'もう少しゆっくり',
+                'twice as much': '2倍の',
+                'three times as long': '3倍の長さ',
+                'half as smart': '半分の賢さ',
+                'one third as many': '3分の1の数',
+                'twenty times the size': '20倍の大きさ',
+                'twice her age': '彼女の2倍の年齢',
+                'less crowded': 'あまり混んでいない',
+                'exercise more': 'もっと運動する',
+                'eat less': '食べる量を減らす',
+                'more and more beautiful': 'ますます美しく',
+                'More and more people': 'ますます多くの人々',
+                'the longest river': '一番長い川',
+                'does the best': '一番成績がいい',
+                'the coldest month': '一番寒い月',
+                'the youngest': '一番年下',
+                'one of the greatest': '最も偉大な〜の1つ',
+                'inventions': '発明',
+                'the most embarrassing': '最も恥ずかしい',
+                'have ever had': 'これまでにした',
+                'the most interesting': '最も面白い',
+                'have ever read': 'これまでに読んだ',
+                'the greatest ever': '史上最高の',
+                'by far the best': '抜群に良い',
+                'the very best': 'まさに最適の',
+                'jet lag': '時差ぼけ',
+                'the least expensive': '一番安い',
+                'the second largest': '2番目に大きい',
+                'No other mountain': '他のどんな山も〜ない',
+                'higher than': 'より高い',
+                'as high as': '〜と同じくらい高い',
+                'any other mountain': '他のどんな山より',
+                'Nothing else': '他に何も〜ない',
+                'more precious than': 'より大切な',
+                'as precious as': '〜と同じくらい大切',
+                'than anything else': '他の何よりも'
+            };
+
+            const found = [];
+            for (const [eng, jpn] of Object.entries(vocabMap)) {
+                if (english.includes(eng) && found.length < 5) {
+                    found.push({ word: eng, meaning: jpn });
+                }
+            }
+            return found;
+        }
+
+        // 関連文法をまとめる
+        function getRelatedGrammar(topic) {
+            const grammarGroups = {
+                '分詞': ['分詞（限定用法）', '分詞（叙述用法）'],
+                '文型': ['第2文型（SVC）', '第4文型（SVOO）', '第5文型（SVOC）', '第5文型（help O do）'],
+                '知覚・使役': ['知覚構文', '知覚構文（受動態）', '使役構文（受動態）', 'have O done'],
+                '名詞・冠詞': ['可算名詞・不可算名詞', '定冠詞の用法', '冠詞の様々な用法'],
+                '代名詞': ['代名詞（one）', '代名詞（them）', '代名詞（it）', '代名詞（give it to）', '代名詞（that）'],
+                'itの用法': ['itの用法（天候）', 'itの用法（状況）', 'itの用法（距離）', 'itの用法（曜日）', 'itの用法（it takes）', 'itの用法（how long）', 'itの用法（it costs）'],
+                '総称人称': ['総称人称（you）', '総称人称（we）', '総称人称（they）', '総称人称（one）'],
+                '再帰代名詞': ['再帰代名詞（再帰用法）', '再帰代名詞（help oneself）', '再帰代名詞（make oneself understood）', '再帰代名詞（by oneself）', '再帰代名詞（強調用法）'],
+                'both/either/neither': ['both', 'either', 'neither', 'neither...nor', 'either（否定文）'],
+                'all/every/each/none': ['every', 'each', 'each of', 'none'],
+                'some/any': ['some（理由）', 'any', 'something', 'somewhere/anywhere', 'anything else'],
+                'another/other': ['another', 'the others', 'the other', 'the other side', 'the other students', 'some...others', 'each other'],
+                '比較級': ['比較級', '比較級（than）'],
+                '原級比較': ['原級比較（as...as）', '原級比較（否定）', '原級比較（語順）', '原級比較（as...as possible）', '原級比較（as soon as possible）'],
+                '比較の注意点': ['比較の注意点（that of）', '比較の注意点（as...as）', '比較の注意点（in/than）', '比較の注意点（than expected）', '比較の注意点（than usual）', '比較の注意点（look older）'],
+                '比較の差': ['比較の差（much）', '比較の差（far）', '比較の差（a lot）', '比較の差（a little）'],
+                '倍数比較': ['倍数比較（twice as...as）', '倍数比較（three times as...as）', '倍数比較（half）', '倍数比較（one third）', '倍数比較（times the size）', '倍数比較（twice her age）'],
+                '劣等比較': ['劣等比較（less...than）', '劣等比較（less）'],
+                '最上級': ['最上級', 'one of the＋最上級', '最上級＋ever', '最上級の強調（by far）', '最上級の強調（very）', '劣等最上級（least）', '序数詞＋最上級'],
+                '最上級相当': ['最上級相当（no other）', '最上級相当（nothing/anything）']
+            };
+
+            for (const [group, topics] of Object.entries(grammarGroups)) {
+                if (topics.some(t => topic.includes(t.replace(/（.*）/, '')) || t.includes(topic.replace(/（.*）/, '')))) {
+                    return { group, related: topics.filter(t => t !== topic) };
+                }
+            }
+            return null;
+        }
+
+        // 問題カードを生成
+        function createQuestionCard(q) {
+            const rating = ratings[q.id];
+            const statusEmoji = rating === 'correct' ? '○' : rating === 'unsure' ? '△' : rating === 'wrong' ? '×' : '';
+            const typeClass = q.type === 'ondoku' ? 'ondoku' : 'anshou';
+            const typeName = q.type === 'ondoku' ? '音読例文' : '暗唱例文';
+
+            // キーフレーズと語彙を抽出
+            const keyPhrases = extractKeyPhrases(q.grammar, q.english);
+            const vocabulary = extractVocabulary(q.english);
+            const relatedGrammar = getRelatedGrammar(q.topic);
+
+            // キーフレーズのHTML
+            let keyPhrasesHtml = '';
+            if (keyPhrases.length > 0) {
+                keyPhrasesHtml = `
+                    <div class="key-expressions-section">
+                        <div class="key-expressions-label">重要表現</div>
+                        ${keyPhrases.map(p => `<span class="key-expression">${p}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            // 語彙のHTML
+            let vocabHtml = '';
+            if (vocabulary.length > 0) {
+                vocabHtml = `
+                    <div class="vocab-section">
+                        <div class="vocab-label">重要語彙</div>
+                        ${vocabulary.map(v => `<span class="vocab-item"><span class="word">${v.word}</span>: ${v.meaning}</span>`).join(' / ')}
+                    </div>
+                `;
+            }
+
+            // 関連文法のHTML
+            let relatedHtml = '';
+            if (relatedGrammar && relatedGrammar.related.length > 0) {
+                relatedHtml = `
+                    <div class="related-grammar-section">
+                        <div class="related-label">関連文法【${relatedGrammar.group}】</div>
+                        <div class="related-items">${relatedGrammar.related.slice(0, 3).join('、')}</div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="question-card" data-id="${q.id}">
+                    <div class="question-header">
+                        <div class="question-info">
+                            <span class="question-week">第${q.week}週</span>
+                            <span class="question-type ${typeClass}">${typeName}</span>
+                        </div>
+                        <span class="question-status">${statusEmoji}</span>
+                    </div>
+                    <span class="grammar-topic">${q.topic}</span>
+                    <div class="question-text">${q.japanese}</div>
+                    <div class="answer-section">
+                        <button class="show-answer-btn" onclick="showAnswer()">解答を見る</button>
+                        <div class="answer-text" id="answer-box">
+                            <div class="answer-label">解答</div>
+                            <div class="answer-english">${q.english}</div>
+                            ${keyPhrasesHtml}
+                            ${vocabHtml}
+                            <div class="answer-japanese-repeat">【日本語】${q.japanese}</div>
+                        </div>
+                        <div class="grammar-note" id="grammar-box">
+                            <strong>文法解説</strong>
+                            <p style="margin-top: 0.5rem;">${q.grammar}</p>
+                            ${relatedHtml}
+                        </div>
+                        <div class="rating-buttons" id="rating-buttons">
+                            <button class="rating-btn correct ${rating === 'correct' ? 'selected' : ''}" onclick="setRating('correct')">○</button>
+                            <button class="rating-btn unsure ${rating === 'unsure' ? 'selected' : ''}" onclick="setRating('unsure')">△</button>
+                            <button class="rating-btn wrong ${rating === 'wrong' ? 'selected' : ''}" onclick="setRating('wrong')">×</button>
+                        </div>
+                        <button class="next-btn" id="next-btn" onclick="nextQuestion()">次の問題 →</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 問題を表示
+        function renderQuestion() {
+            const container = document.getElementById('questions-container');
+            filteredQuestions = getFilteredQuestions();
+
+            if (filteredQuestions.length === 0) {
+                container.innerHTML = '<div class="no-questions">該当する問題がありません</div>';
+                updateProgress();
+                return;
+            }
+
+            if (currentIndex >= filteredQuestions.length) {
+                // 完了メッセージ
+                container.innerHTML = `
+                    <div class="complete-message">
+                        <h2>お疲れ様でした！</h2>
+                        <p>全ての問題を解き終わりました。</p>
+                        <button class="restart-btn" onclick="restart()">最初からやり直す</button>
+                    </div>
+                `;
+                updateProgress();
+                return;
+            }
+
+            const q = filteredQuestions[currentIndex];
+            container.innerHTML = createQuestionCard(q);
+            answerShown = false;
+            updateProgress();
+            updateStats();
+        }
+
+        // 解答を表示
+        function showAnswer() {
+            document.getElementById('answer-box').classList.add('show');
+            document.getElementById('grammar-box').classList.add('show');
+            document.getElementById('rating-buttons').classList.add('show');
+            document.getElementById('next-btn').classList.add('show');
+            answerShown = true;
+        }
+
+        // 評価を設定
+        function setRating(rating) {
+            const q = filteredQuestions[currentIndex];
+            ratings[q.id] = rating;
+            saveRatings();
+
+            // ボタンの選択状態を更新
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`.rating-btn.${rating}`).classList.add('selected');
+
+            // ステータス更新
+            document.querySelector('.question-status').textContent =
+                rating === 'correct' ? '○' : rating === 'unsure' ? '△' : '×';
+
+            updateStats();
+        }
+
+        // 次の問題
+        function nextQuestion() {
+            currentIndex++;
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 最初からやり直す
+        function restart() {
+            currentIndex = 0;
+            renderQuestion();
+        }
+
+        // 全てリセット
+        function resetAll() {
+            if (confirm('全ての回答をリセットしますか？')) {
+                ratings = {};
+                saveRatings();
+                currentIndex = 0;
+                updateStats();
+                renderQuestion();
+            }
+        }
+
+        // フィルター変更時
+        function applyFilters() {
+            currentIndex = 0;
+            renderQuestion();
+        }
+
+        // イベントリスナー設定
+        document.querySelectorAll('.week-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentWeek = btn.dataset.week;
+                applyFilters();
+            });
+        });
+
+        document.querySelectorAll('.type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentType = btn.dataset.type;
+                applyFilters();
+            });
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                applyFilters();
+            });
+        });
+
+        // キーボードショートカット
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' && !answerShown) {
+                e.preventDefault();
+                showAnswer();
+            } else if (e.key === 'ArrowRight' && answerShown) {
+                nextQuestion();
+            } else if (e.key === '1' && answerShown) {
+                setRating('correct');
+            } else if (e.key === '2' && answerShown) {
+                setRating('unsure');
+            } else if (e.key === '3' && answerShown) {
+                setRating('wrong');
+            }
+        });
+
+        // 初期化
+        loadRatings();
+        updateStats();
+        renderQuestion();
+    </script>
+</body>
+</html>
